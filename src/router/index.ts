@@ -7,8 +7,8 @@ const router = createRouter({
       component: { template: '<div>home</div>' }
     },
     {
-      path: '/about',
-      component: { template: '<div>About</div>' }
+      path: '/login',
+      component: () => import('@/views/Login/Login.vue')
     }
   ],
   history: createWebHistory(),
