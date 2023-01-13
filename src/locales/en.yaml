@@ -1,5 +1,5 @@
 login: 
-  login: Login
+  submit: Login
   username: username
   password: password
   userForm: User Form

@@ -10,7 +10,7 @@
       <div class="title-container">
         <h1 text-center>{{ t('login.userForm') }}</h1>
         <n-icon
-          class="language cursor-pointer select-none color-light-100"
+          class="language cursor-pointer select-none"
           :size="24"
           @click="languageToggle"
         >
@@ -36,8 +36,13 @@
         />
       </n-form-item>
       <n-form-item>
-        <n-button style="width: 100%" type="primary" @click="loginHandle">
-          {{ t('login.login') }}
+        <n-button
+          :loading="loading"
+          style="width: 100%"
+          type="primary"
+          @click="loginHandle"
+        >
+          {{ t('login.submit') }}
         </n-button>
       </n-form-item>
       <div class="tips">
@@ -50,6 +55,7 @@
 
 <script setup lang="ts">
 import { FormInst, FormItemRule, useMessage, FormRules } from 'naive-ui'
+import { useUserStore } from '@/store/user'
 
 interface ModelType {
   username: string | undefined
@@ -57,12 +63,17 @@ interface ModelType {
 }
 
 const { t, locale } = useI18n()
+
+const { login } = useUserStore()
+
+const loading = ref(false)
 const formRef = ref<FormInst | null>(null)
 const message = useMessage()
 const modelRef = ref<ModelType>({
   username: 'admin',
   password: '111111'
 })
+
 const rules: FormRules = {
   username: [
     {
@@ -94,9 +105,16 @@ const rules: FormRules = {
 
 function loginHandle(e: MouseEvent) {
   e.preventDefault()
-  formRef.value?.validate(errors => {
+  formRef.value?.validate(async errors => {
     if (!errors) {
-      message.success('验证成功')
+      const { username, password } = modelRef.value
+      loading.value = true
+      try {
+        await login({ username, password })
+        loading.value = false
+      } catch (e) {
+        loading.value = false
+      }
     } else {
       console.log(errors)
       message.error('验证失败')

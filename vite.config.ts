@@ -25,9 +25,9 @@ export default defineConfig({
       ]
     }),
     AutoImport({
-      imports: ['vue', 'vue-router', '@vueuse/core', 'vue-i18n'],
+      imports: ['vue', 'vue-router', '@vueuse/core', 'vue-i18n', 'pinia'],
       dts: 'src/auto-imports.d.ts',
-      dirs: ['src/composables', 'src/stores'],
+      dirs: ['src/store'],
       vueTemplate: true
     }),
     Unocss({
