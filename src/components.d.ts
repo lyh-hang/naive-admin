@@ -23,11 +23,14 @@ declare module '@vue/runtime-core' {
     NIcon: typeof import('naive-ui')['NIcon']
     NInput: typeof import('naive-ui')['NInput']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
+    NResult: typeof import('naive-ui')['NResult']
     NRow: typeof import('naive-ui')['NRow']
     NSp: typeof import('naive-ui')['NSp']
     NSpace: typeof import('naive-ui')['NSpace']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ViconLanguage: typeof import('@vicons/ionicons5')['Language']
+    ViconMoonOutline: typeof import('@vicons/ionicons5')['MoonOutline']
+    ViconSunnyOutline: typeof import('@vicons/ionicons5')['SunnyOutline']
   }
 }

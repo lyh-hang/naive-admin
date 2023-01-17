@@ -1,15 +1,16 @@
 import { login } from '@/api/user'
-
-interface User {
-  username: string | undefined
-  password: string | undefined
-}
+import { token, setToken } from '@/composables/token'
 
 export const useUserStore = defineStore('user', {
+  state() {
+    return {
+      token
+    }
+  },
   actions: {
-    async login(data: User) {
-      const res = await login(data)
-      console.log(res)
+    async login(userForm: UserForm) {      
+      const res = await login(userForm)
+      setToken(res.token)
     }
   }
 })

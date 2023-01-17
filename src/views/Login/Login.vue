@@ -8,6 +8,14 @@
       class="login-form"
     >
       <div class="title-container">
+        <n-icon
+          class="theme cursor-pointer select-none"
+          :size="24"
+          @click="toggleTheme"
+        >
+          <ViconSunnyOutline v-show="theme === null" />
+          <ViconMoonOutline v-show="theme !== null" />
+        </n-icon>
         <h1 text-center>{{ t('login.userForm') }}</h1>
         <n-icon
           class="language cursor-pointer select-none"
@@ -30,7 +38,7 @@
           v-model:value="modelRef.password"
           type="password"
           show-password-on="click"
-          @keydown.enter.prevent
+          @keydown.enter.prevent="submit"
           :placeholder="t('login.password')"
           :input-props="{ autocomplete: 'off' }"
         />
@@ -40,7 +48,7 @@
           :loading="loading"
           style="width: 100%"
           type="primary"
-          @click="loginHandle"
+          @click.submit="submit"
         >
           {{ t('login.submit') }}
         </n-button>
@@ -56,24 +64,21 @@
 <script setup lang="ts">
 import { FormInst, FormItemRule, useMessage, FormRules } from 'naive-ui'
 import { useUserStore } from '@/store/user'
-
-interface ModelType {
-  username: string | undefined
-  password: string | undefined
-}
+import { theme, toggleTheme } from '@/composables/theme'
 
 const { t, locale } = useI18n()
 
 const { login } = useUserStore()
 
-const loading = ref(false)
+const router = useRouter()
+
+const loading = ref<boolean>(false)
 const formRef = ref<FormInst | null>(null)
 const message = useMessage()
-const modelRef = ref<ModelType>({
+const modelRef = ref<UserForm>({
   username: 'admin',
   password: '111111'
 })
-
 const rules: FormRules = {
   username: [
     {
@@ -103,7 +108,7 @@ const rules: FormRules = {
   ]
 }
 
-function loginHandle(e: MouseEvent) {
+function submit(e: MouseEvent | KeyboardEvent) {
   e.preventDefault()
   formRef.value?.validate(async errors => {
     if (!errors) {
@@ -112,6 +117,7 @@ function loginHandle(e: MouseEvent) {
       try {
         await login({ username, password })
         loading.value = false
+        router.push('/')
       } catch (e) {
         loading.value = false
       }
@@ -143,6 +149,12 @@ function languageToggle() {
   .title-container {
     position: relative;
     width: 100%;
+    .theme {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
     .language {
       position: absolute;
       top: 50%;

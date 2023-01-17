@@ -1,5 +1,5 @@
-import axios from 'axios'
-import { getToken } from './token'
+import axios, { AxiosRequestConfig } from 'axios'
+import { token } from '@/composables/token'
 
 const service = axios.create({
   baseURL: '',
@@ -10,9 +10,8 @@ const message = window.$message
 
 service.interceptors.request.use(
   config => {
-    const token = getToken()
-    if (token && typeof config.headers?.set === 'function') {
-      config.headers?.set('user-token', token)
+    if (token.value && typeof config.headers?.set === 'function') {
+      config.headers?.set('user-access-token', token.value)
     }
     return config
   },
@@ -21,13 +20,7 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   response => {
-    const res = response.data
-
-    if (res.code !== 200) {
-      message.error(res.message || 'Error')
-      return Promise.reject(new Error(res.message || 'Error'))
-    }
-    return res
+    return response
   },
   error => {
     message.error(error.message)
@@ -35,4 +28,17 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+export default async <T>(config: AxiosRequestConfig): Promise<T> => {
+  try {
+    const { data } = await service<T>(config)
+
+    if ((data as any).code !== 200) {
+      message.error((data as any).msg)
+      return Promise.reject(new Error((data as any).msg))
+    } else {
+      return Promise.resolve(data)
+    }
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
