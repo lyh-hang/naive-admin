@@ -1,13 +1,16 @@
-import { createDiscreteApi } from 'naive-ui'
+import { createDiscreteApi, lightTheme, darkTheme, ConfigProviderProps } from 'naive-ui'
+import { theme } from '@/composables/theme'
 
 export default function useDiscreteApi() {
-  const { message, loadingBar, notification, dialog } = createDiscreteApi([
-    'message',
-    'loadingBar',
-    'notification',
-    'dialog'
-  ])
+  const configProviderProps = computed<ConfigProviderProps>(() => ({
+    theme: theme.value === null ? lightTheme : darkTheme
+  }))
   
+  const { message, loadingBar, notification, dialog } = createDiscreteApi(
+    ['message', 'loadingBar', 'notification', 'dialog'],
+    { configProviderProps }
+  )
+
   window.$message = message
   window.$loadingBar = loadingBar
   window.$notification = notification

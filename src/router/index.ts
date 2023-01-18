@@ -1,16 +1,49 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { token } from '@/composables/token'
 import { createRouter, createWebHistory } from 'vue-router'
-import NProgress from 'nprogress'
 
 import Layuot from '@/layout/Layout.vue'
 
-NProgress.configure({ showSpinner: false })
+type TRoutes = RouteRecordRaw & {
+  children?: TRoutes[]
+  meta?: {
+    menu?: boolean
+    title?: string
+    icon?: string
+  }
+}
 
-const routes: RouteRecordRaw[] = [
+const routes: TRoutes[] = [
   {
     path: '/',
-    component: Layuot
+    component: Layuot,
+    children: [
+      {
+        path: '',
+        name: 'Dashboard',
+        component: () => import('@/views/Dashboard/Dashboard.vue'),
+        meta: { menu: true, title: '仪表盘', icon: 'SpeedometerOutline' }
+      },
+      {
+        path: 'menu',
+        name: 'Menu',
+        component: () => import('@/views/NestedMenus/NestedMenus.vue'),
+        meta: { menu: true, title: '组合菜单', icon: 'MenuOutline' },
+        children: [
+          {
+            path: 'menu1',
+            name: 'Menu1',
+            component: () => import('@/views/NestedMenus/Menu1/Menu1.vue')
+          }
+        ]
+      },
+      {
+        path: 'system_setting',
+        name: 'SystemSetting',
+        component: () => import('@/views/Setting/Setting.vue'),
+        meta: { menu: true, title: '系统设置', icon: 'SettingsOutline' }
+      }
+    ]
   },
   {
     path: '/login',
@@ -35,7 +68,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, form) => {
-  NProgress.start()
+  window.$loadingBar.start()
   if (token.value) {
     if (to.path === '/login') {
       return { path: '/' }
@@ -46,11 +79,11 @@ router.beforeEach((to, form) => {
 })
 
 router.afterEach(() => {
-  NProgress.done()
+  window.$loadingBar.finish()
 })
 
 router.onError(() => {
-  NProgress.done()
+  window.$loadingBar.finish()
 })
 
 export default router
