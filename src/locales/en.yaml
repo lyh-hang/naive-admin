@@ -8,3 +8,14 @@ error:
   tips: Please check whether the URL you entered is correct or click the button below to return to the home page.
   404: No Resource
 go home: Back to home
+layout: 
+  Dashboard: Dashboard
+  Nested: Nested
+  Menu1: Menu1
+  Menu2: Menu2
+  Menu2_1: Menu2_1
+  Menu2_2: Menu2_2
+  Menu3: Menu3
+  Menu3_1: Menu3_1
+  Menu3_1_1: Menu3_1_1
+  SystemSetting: SystemSetting

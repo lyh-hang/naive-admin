@@ -2,34 +2,56 @@
 import { Component } from 'vue'
 import { MenuOption, NIcon } from 'naive-ui'
 import * as vicons from '@vicons/ionicons5'
-import { RouterLink } from 'vue-router'
+import { RouteRecordNormalized, RouteRecordRaw, RouterLink } from 'vue-router'
 
+const { t } = useI18n()
 const router = useRouter()
 const routes = router.getRoutes()
-console.log(routes)
 
-const current = computed(() => router.currentRoute.value.path)
+const current = computed(() => {
+  const pathArr = router.currentRoute.value.path.split('/')
+  return pathArr[pathArr.length - 1]
+})
 
 function renderIcon(icon: Component) {
-  return () => h(NIcon, null, { default: () => h(icon) })
+  return icon ? () => h(NIcon, null, { default: () => h(icon) }) : undefined
 }
 
-const menuOptions: MenuOption[] = routes
-  .filter(route => route.meta.menu)
-  .map(i => ({
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            path: i.path
-          }
-        },
-        { default: () => i.meta.title }
-      ),
-    icon: renderIcon((vicons as { [key: string]: any })[i.meta.icon as string]),
-    key: i.path
-  }))
+function routes2MenuOption(
+  routes: RouteRecordNormalized[] | RouteRecordRaw[]
+): MenuOption[] {
+  return routes.map(route => {
+    const label = route.children?.length
+      ? () => t(`layout.${String(route.name)}`)
+      : () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: route.name
+              }
+            },
+            { default: () => t(`layout.${String(route.name)}`) }
+          )
+    const key = route.path.replace('/', '')
+    const icon = renderIcon(
+      (vicons as { [key: string]: any })[route.meta?.icon as string]
+    )
+    const children = route.children?.length
+      ? routes2MenuOption(route.children)
+      : undefined
+    return {
+      label,
+      key,
+      icon,
+      children
+    }
+  })
+}
+
+const menuOptions: MenuOption[] = routes2MenuOption(
+  routes.filter(i => i.meta.menu)
+)
 </script>
 
 <template>

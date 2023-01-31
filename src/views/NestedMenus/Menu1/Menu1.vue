@@ -1,3 +1,3 @@
 <template>
-    Menu1
+    <n-card>Menu1</n-card>
 </template>

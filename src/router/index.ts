@@ -8,7 +8,6 @@ type TRoutes = RouteRecordRaw & {
   children?: TRoutes[]
   meta?: {
     menu?: boolean
-    title?: string
     icon?: string
   }
 }
@@ -22,18 +21,61 @@ const routes: TRoutes[] = [
         path: '',
         name: 'Dashboard',
         component: () => import('@/views/Dashboard/Dashboard.vue'),
-        meta: { menu: true, title: '仪表盘', icon: 'SpeedometerOutline' }
+        meta: { menu: true, icon: 'SpeedometerOutline' }
       },
       {
-        path: 'menu',
-        name: 'Menu',
+        path: 'nested',
+        name: 'Nested',
+        redirect: { name: 'Menu1' },
         component: () => import('@/views/NestedMenus/NestedMenus.vue'),
-        meta: { menu: true, title: '组合菜单', icon: 'MenuOutline' },
+        meta: { menu: true, icon: 'MenuOutline' },
         children: [
           {
             path: 'menu1',
             name: 'Menu1',
             component: () => import('@/views/NestedMenus/Menu1/Menu1.vue')
+          },
+          {
+            path: 'menu2',
+            name: 'Menu2',
+            component: () => import('@/views/NestedMenus/Menu2/Menu2.vue'),
+            children: [
+              {
+                path: 'menu2_1',
+                name: 'Menu2_1',
+                component: () =>
+                  import('@/views/NestedMenus/Menu2/Menu2_1/Menu2_1.vue')
+              },
+              {
+                path: 'menu2_2',
+                name: 'Menu2_2',
+                component: () =>
+                  import('@/views/NestedMenus/Menu2/Menu2_2/Menu2_2.vue')
+              }
+            ]
+          },
+          {
+            path: 'menu3',
+            name: 'Menu3',
+            component: () => import('@/views/NestedMenus/Menu3/Menu3.vue'),
+            children: [
+              {
+                path: 'menu3_1',
+                name: 'Menu3_1',
+                component: () =>
+                  import('@/views/NestedMenus/Menu3/Menu3_1/Menu3_1.vue'),
+                children: [
+                  {
+                    path: 'menu3_1_1',
+                    name: 'Menu3_1_1',
+                    component: () =>
+                      import(
+                        '@/views/NestedMenus/Menu3/Menu3_1/Menu3_1_1/Menu3_1_1.vue'
+                      )
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -41,7 +83,7 @@ const routes: TRoutes[] = [
         path: 'system_setting',
         name: 'SystemSetting',
         component: () => import('@/views/Setting/Setting.vue'),
-        meta: { menu: true, title: '系统设置', icon: 'SettingsOutline' }
+        meta: { menu: true, icon: 'SettingsOutline' }
       }
     ]
   },
@@ -69,13 +111,9 @@ const router = createRouter({
 
 router.beforeEach((to, form) => {
   window.$loadingBar.start()
-  if (token.value) {
-    if (to.path === '/login') {
-      return { path: '/' }
-    }
-  } else {
-    return '/login'
-  }
+  if (!token.value && to.name !== 'Login') return '/login'
+
+  if (token.value && to.name === 'Login') return '/'
 })
 
 router.afterEach(() => {

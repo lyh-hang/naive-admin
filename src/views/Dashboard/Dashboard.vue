@@ -1,5 +1,5 @@
 <template>
-    <n-card h-screen embedded :bordered="false">
-        Dashboard
-    </n-card>
+  <n-card h-screen embedded :bordered="false">
+    Dashboard
+  </n-card>
 </template>
