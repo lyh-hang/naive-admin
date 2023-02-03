@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { theme, toggleTheme } from '@/composables/theme'
+import { theme } from '@/composables/theme'
+import { toggleFullscreen, isFullscreen } from '@/composables/fullscreen'
+import { useUserStore } from '@/store/user'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const router = useRouter()
+const userStore = useUserStore()
 const breadcrumbs = computed(() =>
   router.currentRoute.value.matched.filter(i => i.name)
 )
-
-function languageToggle() {
-  locale.value = locale.value === 'en' ? 'zh-CN' : 'en'
-}
+const color = computed(() => `hover-bg-${theme.value ? 'white' : 'black'}`)
 </script>
 
 <template>
   <n-layout-header
-    class="header-container flex items-center pl-4 pr-4 justify-between"
+    class="h-50px flex items-center justify-between pl-4 pr-4 border-bottom-1"
   >
     <n-breadcrumb>
       <n-breadcrumb-item
@@ -31,32 +31,24 @@ function languageToggle() {
         {{ t(`layout.${String(b.name)}`) }}
       </n-breadcrumb-item>
     </n-breadcrumb>
-    <div class="flex items-center">
+    <div class="h-full flex items-center">
       <n-icon
-        class="ml-4 cursor-pointer select-none"
+        class="w-35px h-full center cursor-pointer select-none hover-bg-op-10"
+        :class="`hover-bg-${theme ? 'white' : 'black'}`"
         :size="20"
-        @click="toggleTheme"
+        @click="toggleFullscreen"
       >
-        <ViconSunnyOutline v-show="theme === null" />
-        <ViconMoonOutline v-show="theme !== null" />
+        <ViconExpandOutline v-show="!isFullscreen" />
+        <ViconContractOutline v-show="isFullscreen" />
       </n-icon>
-      <n-icon
-        class="ml-4 cursor-pointer select-none"
-        :size="20"
-        @click="languageToggle"
-      >
-        <ViconLanguage />
-      </n-icon>
-      <n-avatar class="ml-4 cursor-pointer select-none" size="medium">
-        avatar
-      </n-avatar>
+      <Theme w-35px h-full hover-bg-op-10 :class="`hover-bg-${theme ? 'white' : 'black'}`" />
+      <Language w-35px h-full mr-2 hover-bg-op-10 :class="`hover-bg-${theme ? 'white' : 'black'}`" />
+      <n-avatar
+        class="cursor-pointer select-none"
+        size="medium"
+        object-fit="cover"
+        :src="userStore.userInfo?.avatar"
+      />
     </div>
   </n-layout-header>
 </template>
-
-<style scoped lang="scss">
-.header-container {
-  height: 50px;
-  border-bottom: 1px solid var(--n-border-color);
-}
-</style>

@@ -3,7 +3,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="h-screen flex justify-center items-center">
+  <div class="h-full flex justify-center items-center">
     <n-result
       status="404"
       :title="`404 ${t('error.404')}`"

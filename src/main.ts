@@ -8,7 +8,7 @@ import useMock from './mock'
 import useDiscreteApi from './utils/createDiscreteApi'
 
 import 'uno.css'
-import './style.scss'
+import './styles/index.scss'
 
 // 使用mockjs
 useMock()

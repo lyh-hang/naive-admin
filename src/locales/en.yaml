@@ -19,3 +19,6 @@ layout:
   Menu3_1: Menu3_1
   Menu3_1_1: Menu3_1_1
   SystemSetting: SystemSetting
+  Icons: Icons
+  Error: Error Pages
+  NotFound: '404'

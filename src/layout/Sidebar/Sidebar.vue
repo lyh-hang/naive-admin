@@ -8,6 +8,8 @@ const { t } = useI18n()
 const router = useRouter()
 const routes = router.getRoutes()
 
+const isCollapsed = ref<boolean>(false)
+
 const current = computed(() => {
   const pathArr = router.currentRoute.value.path.split('/')
   return pathArr[pathArr.length - 1]
@@ -52,16 +54,37 @@ function routes2MenuOption(
 const menuOptions: MenuOption[] = routes2MenuOption(
   routes.filter(i => i.meta.menu)
 )
+
+function collapsedHandle(collapsed: boolean) {
+  isCollapsed.value = collapsed
+}
+
+function resizeHandle(e: UIEvent) {
+  const rect = document.body.getBoundingClientRect()
+  if(rect.width < 992) {
+    isCollapsed.value = true
+  }
+}
+
+onBeforeMount(() => {
+  window.addEventListener('resize', resizeHandle)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', resizeHandle)
+})
 </script>
 
 <template>
   <n-layout-sider
     bordered
     show-trigger
+    :collapsed="isCollapsed"
     collapse-mode="width"
     :collapsed-width="64"
-    h-screen
+    h-full
     :native-scrollbar="false"
+    :on-update:collapsed="collapsedHandle"
   >
     <n-menu
       :value="current"

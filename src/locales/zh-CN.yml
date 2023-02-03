@@ -19,3 +19,6 @@ layout:
   Menu3_1: 菜单3_1
   Menu3_1_1: 菜单3_1_1
   SystemSetting: 系统设置
+  Icons: 图标
+  Error: 错误页面
+  NotFound: '404'

@@ -6,13 +6,26 @@ import Tabs from './Tabs/Tabs.vue'
 
 <template>
   <div class="layout">
-    <n-layout has-sider>
+    <n-layout h-full has-sider>
       <Sidebar />
-      <n-layout>
+      <n-layout h-full>
         <Header />
         <Tabs />
         <n-layout-content class="layout-wrap">
-          <RouterView />
+          <RouterView v-slot="{ Component }">
+            <Transition name="fade" mode="out-in">
+              <Suspense>
+                <component :is="Component" :key="$route.path" />
+                <template #fallback>
+                  <n-spin
+                    class="h-full flex justify-center items-center"
+                    size="large"
+                    description="loading..."
+                  />
+                </template>
+              </Suspense>
+            </Transition>
+          </RouterView>
         </n-layout-content>
       </n-layout>
     </n-layout>
@@ -27,6 +40,7 @@ import Tabs from './Tabs/Tabs.vue'
   .layout-wrap {
     width: 100%;
     height: calc(100% - 82px);
+    overflow: hidden;
   }
 }
 </style>

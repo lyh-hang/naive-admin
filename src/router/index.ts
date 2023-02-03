@@ -24,6 +24,12 @@ const routes: TRoutes[] = [
         meta: { menu: true, icon: 'SpeedometerOutline' }
       },
       {
+        path: 'icons',
+        name: 'Icons',
+        component: () => import('@/views/Icons/Icons.vue'),
+        meta: { menu: true, icon: 'SparklesOutline' }
+      },
+      {
         path: 'nested',
         name: 'Nested',
         redirect: { name: 'Menu1' },
@@ -33,24 +39,28 @@ const routes: TRoutes[] = [
           {
             path: 'menu1',
             name: 'Menu1',
-            component: () => import('@/views/NestedMenus/Menu1/Menu1.vue')
+            component: () => import('@/views/NestedMenus/Menu1/Menu1.vue'),
+            meta: { icon: 'MenuOutline' }
           },
           {
             path: 'menu2',
             name: 'Menu2',
             component: () => import('@/views/NestedMenus/Menu2/Menu2.vue'),
+            meta: { icon: 'MenuOutline' },
             children: [
               {
                 path: 'menu2_1',
                 name: 'Menu2_1',
                 component: () =>
-                  import('@/views/NestedMenus/Menu2/Menu2_1/Menu2_1.vue')
+                  import('@/views/NestedMenus/Menu2/Menu2_1/Menu2_1.vue'),
+                meta: { icon: 'MenuOutline' }
               },
               {
                 path: 'menu2_2',
                 name: 'Menu2_2',
                 component: () =>
-                  import('@/views/NestedMenus/Menu2/Menu2_2/Menu2_2.vue')
+                  import('@/views/NestedMenus/Menu2/Menu2_2/Menu2_2.vue'),
+                meta: { icon: 'MenuOutline' }
               }
             ]
           },
@@ -58,12 +68,14 @@ const routes: TRoutes[] = [
             path: 'menu3',
             name: 'Menu3',
             component: () => import('@/views/NestedMenus/Menu3/Menu3.vue'),
+            meta: { icon: 'MenuOutline' },
             children: [
               {
                 path: 'menu3_1',
                 name: 'Menu3_1',
                 component: () =>
                   import('@/views/NestedMenus/Menu3/Menu3_1/Menu3_1.vue'),
+                meta: { icon: 'MenuOutline' },
                 children: [
                   {
                     path: 'menu3_1_1',
@@ -71,7 +83,8 @@ const routes: TRoutes[] = [
                     component: () =>
                       import(
                         '@/views/NestedMenus/Menu3/Menu3_1/Menu3_1_1/Menu3_1_1.vue'
-                      )
+                      ),
+                    meta: { icon: 'MenuOutline' }
                   }
                 ]
               }
@@ -88,16 +101,25 @@ const routes: TRoutes[] = [
     ]
   },
   {
+    path: '/error',
+    name: 'Error',
+    component: Layuot,
+    redirect: { name: 'NotFound' },
+    meta: { menu: true, icon: 'SadOutline' },
+    children: [
+      {
+        path: '404',
+        name: 'NotFound',
+        component: () => import('@/views/Error/NotFound.vue')
+      }
+    ]
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Login/Login.vue')
   },
-  {
-    path: '/404',
-    name: 'NotFound',
-    component: import('@/views/Error/NotFound.vue')
-  },
-  { path: '/:pathMatch(.*)*', redirect: '/404' }
+  { path: '/:pathMatch(.*)*', redirect: { name: 'NotFound' } }
 ]
 
 const router = createRouter({

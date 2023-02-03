@@ -8,22 +8,11 @@
       class="login-form"
     >
       <div class="title-container">
-        <n-icon
-          class="theme cursor-pointer select-none"
-          :size="24"
-          @click="toggleTheme"
-        >
-          <ViconSunnyOutline v-show="theme === null" />
-          <ViconMoonOutline v-show="theme !== null" />
-        </n-icon>
+        <Theme :size="24" class="theme" />
         <h1 text-center>{{ t('login.userForm') }}</h1>
-        <n-icon
-          class="language cursor-pointer select-none"
-          :size="24"
-          @click="languageToggle"
-        >
-          <ViconLanguage />
-        </n-icon>
+        <div class="language">
+          <Language :size="24" />
+        </div>
       </div>
       <n-form-item path="username">
         <n-auto-complete

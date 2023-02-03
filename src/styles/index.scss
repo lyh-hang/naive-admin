@@ -19,7 +19,9 @@ body,
   height: 100%;
 }
 
-* {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
@@ -36,3 +38,21 @@ h6 {
 a {
   text-decoration: none;
 }
+
+.border-full-1 {
+  border: 1px solid var(--n-border-color);
+}
+.border-top-1 {
+  border-bottom: 1px solid var(--n-border-color);
+}
+.border-bottom-1 {
+  border-bottom: 1px solid var(--n-border-color);
+}
+.border-left-1 {
+  border-bottom: 1px solid var(--n-border-color);
+}
+.border-right-1 {
+  border-bottom: 1px solid var(--n-border-color);
+}
+
+@import url('./transition.scss');
