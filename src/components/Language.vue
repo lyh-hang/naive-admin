@@ -16,6 +16,8 @@ const { size } = defineProps({
   }
 })
 
+const { setLocale } = useLayoutStore()
+
 const options = ref<DropdownOption[]>([
   {
     label: '简体中文',
@@ -37,6 +39,7 @@ watch(
     options.value = options.value.map(item => {
       return { ...item, disabled: item.key === locale.value }
     })
+    setLocale(locale.value)
   },
   { immediate: true }
 )

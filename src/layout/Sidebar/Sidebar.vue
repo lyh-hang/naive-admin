@@ -3,12 +3,14 @@ import { Component } from 'vue'
 import { MenuOption, NIcon } from 'naive-ui'
 import * as vicons from '@vicons/ionicons5'
 import { RouteRecordNormalized, RouteRecordRaw, RouterLink } from 'vue-router'
+import { useLayoutStore } from '@/store/layout'
 
 const { t } = useI18n()
 const router = useRouter()
 const routes = router.getRoutes()
+const { state, setSidebar } = useLayoutStore()
 
-const isCollapsed = ref<boolean>(false)
+const isCollapsed = ref<boolean>(state.sidebar)
 
 const current = computed(() => {
   const pathArr = router.currentRoute.value.path.split('/')
@@ -57,12 +59,14 @@ const menuOptions: MenuOption[] = routes2MenuOption(
 
 function collapsedHandle(collapsed: boolean) {
   isCollapsed.value = collapsed
+  setSidebar(collapsed)
 }
 
 function resizeHandle(e: UIEvent) {
   const rect = document.body.getBoundingClientRect()
-  if(rect.width < 992) {
+  if (rect.width < 992) {
     isCollapsed.value = true
+    setSidebar(isCollapsed.value)
   }
 }
 

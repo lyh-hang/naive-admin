@@ -1,21 +1,38 @@
-
+import { getItem, setItem } from "@/utils/localStorage"
+// import { isDark } from '@/composables/theme'
 
 interface StateType {
-  tags: Array<string>
+  // theme: string | null
+  locale: string | null
+  sidebar: boolean
 }
 
-export const useLayoutStore = defineStore('layout', {
-  state: (): StateType => ({
-    tags: []
-  }),
-  actions: {
-    addTag(name: string) {
-      this.tags.indexOf(name) === -1 &&
-        name !== 'Dashboard' &&
-        this.tags.push(name)
-    },
-    removeTag(name: string) {
-      this.tags = this.tags.filter(i => i !== name)
-    }
+export const useLayoutStore = defineStore('layout', () => {
+  const state = reactive<StateType>({
+    // theme: getItem('theme') || isDark.value ? 'dark' : 'light',
+    locale: getItem('locale'),
+    sidebar: getItem('sidebar') === 'true'|| false
+  })  
+
+  // function setTheme() {
+  //   state.theme = ''
+  //   setItem('theme', 'theme')
+  // }
+  
+  function setLocale(locale: string){
+    state.locale = locale
+    setItem('locale', locale)
+  }
+
+  function setSidebar(sidebar: boolean) {
+    state.sidebar = sidebar
+    setItem('sidebar', `${sidebar}`)
+  }
+
+  return {
+    state,
+    // setTheme,
+    setLocale,
+    setSidebar
   }
 })
