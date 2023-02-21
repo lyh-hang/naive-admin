@@ -1,10 +1,10 @@
 declare interface UserForm {
-    username: string | undefined
-    password: string | undefined
+  username: string | undefined
+  password: string | undefined
 }
 
 declare interface UserInfo {
-    username: string
-    token: string
-    avatar: string
+  username: string
+  avatar: string
+  desc: string
 }

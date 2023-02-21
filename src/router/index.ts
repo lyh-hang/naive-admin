@@ -1,8 +1,10 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { token } from '@/composables/token'
 import { createRouter, createWebHistory } from 'vue-router'
-
+import { formatDistanceStrict } from 'date-fns'
 import Layuot from '@/layout/Layout.vue'
+import { getStorage } from '@/utils/localStorage'
+import { i18n } from '@/locales'
 
 type TRoutes = RouteRecordRaw & {
   children?: TRoutes[]
@@ -133,7 +135,22 @@ const router = createRouter({
 
 router.beforeEach((to, form) => {
   window.$loadingBar.start()
-  if (!token.value && to.name !== 'Login') return '/login'
+
+  const loginTimer = getStorage('login-timer')
+  const loginDistance = formatDistanceStrict(Date.now(), Number(loginTimer), {
+    unit: 'day'
+  }).replace(/ days$/gi, '')
+
+  if (
+    (Number(loginDistance) > 7 && to.name !== 'Login') ||
+    (!token.value && to.name !== 'Login')
+  ) {
+    // @ts-ignore
+    window.$message.warning(i18n.global.t('no auth'))
+    useUserStore().logout()
+  }
+
+  // if (!token.value && to.name !== 'Login') return '/login'
 
   if (token.value && to.name === 'Login') return '/'
 })

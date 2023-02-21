@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { ExpandOutline, ContractOutline } from '@vicons/ionicons5'
 import { theme } from '@/composables/theme'
 import { toggleFullscreen, isFullscreen } from '@/composables/fullscreen'
-import { useUserStore } from '@/store/user'
+import { DropdownOption } from 'naive-ui'
+import { RouterLink } from 'vue-router';
 
 const { t } = useI18n()
 const router = useRouter()
@@ -9,7 +11,29 @@ const userStore = useUserStore()
 const breadcrumbs = computed(() =>
   router.currentRoute.value.matched.filter(i => i.name)
 )
-const color = computed(() => `hover-bg-${theme.value ? 'white' : 'black'}`)
+
+const options = ref<DropdownOption[]>([
+  {
+    label: () => t('layout.git'),
+    key: 1
+  },
+  {
+    label: () => t('layout.logout'),
+    key: 2
+  },
+])
+function handleSelect(key: string | number) {
+  switch (key) {
+    case 1:
+      window.open('https://github.com/lyh-hang/naive-admin')
+      break
+    case 2:
+      userStore.logout()
+      break
+    default:
+      break
+  }
+}
 </script>
 
 <template>
@@ -38,17 +62,35 @@ const color = computed(() => `hover-bg-${theme.value ? 'white' : 'black'}`)
         :size="20"
         @click="toggleFullscreen"
       >
-        <ViconExpandOutline v-show="!isFullscreen" />
-        <ViconContractOutline v-show="isFullscreen" />
+        <ExpandOutline v-show="!isFullscreen" />
+        <ContractOutline v-show="isFullscreen" />
       </n-icon>
-      <Theme w-35px h-full hover-bg-op-10 :class="`hover-bg-${theme ? 'white' : 'black'}`" />
-      <Language w-35px h-full mr-2 hover-bg-op-10 :class="`hover-bg-${theme ? 'white' : 'black'}`" />
-      <n-avatar
-        class="cursor-pointer select-none"
-        size="medium"
-        object-fit="cover"
-        :src="userStore.userInfo?.avatar"
+      <Theme
+        w-35px
+        h-full
+        hover-bg-op-10
+        :class="`hover-bg-${theme ? 'white' : 'black'}`"
       />
+      <Language
+        w-35px
+        h-full
+        mr-2
+        hover-bg-op-10
+        :class="`hover-bg-${theme ? 'white' : 'black'}`"
+      />
+      <n-dropdown
+        trigger="click"
+        show-arrow
+        :options="options"
+        @select="handleSelect"
+      >
+        <n-avatar
+          class="cursor-pointer select-none"
+          size="medium"
+          object-fit="cover"
+          :src="userStore.userInfo?.avatar"
+        />
+      </n-dropdown>
     </div>
   </n-layout-header>
 </template>

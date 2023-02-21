@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { theme, toggleTheme } from '@/composables/theme'
+import { theme, toggleDark } from '@/composables/theme'
+import { SunnyOutline, MoonOutline } from '@vicons/ionicons5'
 
 const { size } = defineProps({
   size: {
@@ -13,9 +14,9 @@ const { size } = defineProps({
   <n-icon
     class="center cursor-pointer select-none"
     :size="size"
-    @click="toggleTheme"
+    @click="toggleDark()"
   >
-    <ViconSunnyOutline v-show="theme === null" />
-    <ViconMoonOutline v-show="theme !== null" />
+    <SunnyOutline v-show="theme === null" />
+    <MoonOutline v-show="theme !== null" />
   </n-icon>
 </template>

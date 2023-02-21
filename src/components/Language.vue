@@ -6,6 +6,7 @@ export default {
 
 <script setup lang="ts">
 import type { DropdownOption } from 'naive-ui'
+import{ Language } from '@vicons/ionicons5'
 
 const { locale } = useI18n()
 
@@ -53,7 +54,7 @@ watch(
     @select="handleSelect"
   >
     <n-icon center cursor-pointer select-none v-bind="$attrs" :size="size">
-      <ViconLanguage />
+      <Language />
     </n-icon>
   </n-dropdown>
 </template>

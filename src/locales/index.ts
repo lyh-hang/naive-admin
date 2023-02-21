@@ -1,5 +1,5 @@
 import { createI18n } from 'vue-i18n'
-import { getItem } from '@/utils/localStorage'
+import { getStorage } from '@/utils/localStorage'
 
 const messages = Object.fromEntries(
   Object.entries(
@@ -14,6 +14,6 @@ const messages = Object.fromEntries(
 
 export const i18n = createI18n({
   legacy: false,
-  locale: getItem('locale') || 'zh-CN',
+  locale: getStorage('locale') || 'zh-CN',
   messages
 })

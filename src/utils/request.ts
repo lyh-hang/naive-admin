@@ -2,11 +2,9 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { token } from '@/composables/token'
 
 const service = axios.create({
-  baseURL: '',
+  baseURL: import.meta.env.VITE_GLOB_BASE_URL,
   timeout: 5000
 })
-
-const message = window.$message
 
 service.interceptors.request.use(
   config => {
@@ -23,7 +21,7 @@ service.interceptors.response.use(
     return response
   },
   error => {
-    message.error(error.message)
+    window.$message.error(error.message)
     return Promise.reject(new Error(error))
   }
 )
@@ -33,7 +31,7 @@ export default async <T>(config: AxiosRequestConfig): Promise<T> => {
     const { data } = await service<T>(config)
 
     if ((data as any).code !== 200) {
-      message.error((data as any).msg)
+      window.$message.error((data as any).msg)
       return Promise.reject(new Error((data as any).msg))
     } else {
       return Promise.resolve(data)

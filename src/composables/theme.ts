@@ -1,18 +1,15 @@
 import { darkTheme } from 'naive-ui'
 import type { GlobalTheme } from 'naive-ui'
 
-const isDark = usePreferredDark()
+const isPreferredDark = usePreferredDark()
+const isDark = useDark()
 
-export const theme = ref<GlobalTheme | null>(isDark.value ? darkTheme : null)
+export const toggleDark = useToggle(isDark)
 
-export const toggleTheme = () => {
-  theme.value = theme.value === null ? darkTheme : null
-}
-
-export const stop = watch(
-  isDark,
-  () => {
-    theme.value = isDark.value ? darkTheme : null
-  },
-  { immediate: true }
+export const theme = computed<GlobalTheme | null>(() =>
+  isDark.value ? darkTheme : null
 )
+
+export const stop = watch(isPreferredDark, isPreferredDark => {
+  toggleDark(isPreferredDark)
+})

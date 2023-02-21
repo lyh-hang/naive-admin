@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -8,6 +8,7 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Unocss from 'unocss/vite'
 import { presetAttributify, presetUno } from 'unocss'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
+import { viteMockServe } from 'vite-plugin-mock'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,13 +17,7 @@ export default defineConfig({
     Components({
       extensions: ['vue'],
       dts: 'src/components.d.ts',
-      resolvers: [
-        NaiveUiResolver(),
-        componentName => {
-          if (componentName.startsWith('Vicon'))
-            return { name: componentName.slice(5), from: '@vicons/ionicons5' }
-        }
-      ]
+      resolvers: [NaiveUiResolver()]
     }),
     AutoImport({
       imports: ['vue', 'vue-router', '@vueuse/core', 'vue-i18n', 'pinia'],
@@ -33,13 +28,23 @@ export default defineConfig({
     Unocss({
       presets: [presetAttributify(), presetUno()],
       rules: [
-        ['center', {display: 'flex', 'align-items': 'center', 'justify-content': 'center'}]
+        [
+          'center',
+          {
+            display: 'flex',
+            'align-items': 'center',
+            'justify-content': 'center'
+          }
+        ]
       ]
     }),
     VueI18nPlugin({
       runtimeOnly: true,
       compositionOnly: true,
       include: [fileURLToPath(new URL('./src/locales/**', import.meta.url))]
+    }),
+    viteMockServe({
+      mockPath: 'mock'
     })
   ],
   resolve: {

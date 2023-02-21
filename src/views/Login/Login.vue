@@ -53,9 +53,8 @@
 <script setup lang="ts">
 import { FormInst, FormItemRule, useMessage, FormRules } from 'naive-ui'
 import { useUserStore } from '@/store/user'
-import { theme, toggleTheme } from '@/composables/theme'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 
 const { login } = useUserStore()
 
@@ -115,10 +114,6 @@ function submit(e: MouseEvent | KeyboardEvent) {
       message.error('验证失败')
     }
   })
-}
-
-function languageToggle() {
-  locale.value = locale.value === 'en' ? 'zh-CN' : 'en'
 }
 </script>
 

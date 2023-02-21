@@ -2,6 +2,15 @@
 import Sidebar from './Sidebar/Sidebar.vue'
 import Header from './Header/Header.vue'
 import Tabs from './Tabs/Tabs.vue'
+
+onMounted(() => {
+  const resizeObserver = new ResizeObserver((entries, observer) => {
+    console.log(entries)
+    console.log('-------------')
+    console.log(observer)
+  })
+  resizeObserver.observe(document.querySelector('.layout-wrap') as Element)
+})
 </script>
 
 <template>
@@ -14,16 +23,7 @@ import Tabs from './Tabs/Tabs.vue'
         <n-layout-content class="layout-wrap">
           <RouterView v-slot="{ Component }">
             <Transition name="fade" mode="out-in">
-              <Suspense>
-                <component :is="Component" :key="$route.path" />
-                <template #fallback>
-                  <n-spin
-                    class="h-full flex justify-center items-center"
-                    size="large"
-                    description="loading..."
-                  />
-                </template>
-              </Suspense>
+              <component :is="Component" :key="$route.path" />
             </Transition>
           </RouterView>
         </n-layout-content>
@@ -36,11 +36,9 @@ import Tabs from './Tabs/Tabs.vue'
 .layout {
   width: 100%;
   height: 100%;
-  overflow: hidden;
   .layout-wrap {
     width: 100%;
     height: calc(100% - 82px);
-    overflow: hidden;
   }
 }
 </style>

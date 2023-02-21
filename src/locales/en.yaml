@@ -8,6 +8,7 @@ error:
   tips: Please check whether the URL you entered is correct or click the button below to return to the home page.
   404: No Resource
 go home: Back to home
+no auth: Expiration of authorization, Please log in again
 layout: 
   Dashboard: Dashboard
   Nested: Nested
@@ -22,3 +23,5 @@ layout:
   Icons: Icons
   Error: Error Pages
   NotFound: '404'
+  logout: Log Out
+  git: GitHub
