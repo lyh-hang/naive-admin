@@ -3,42 +3,49 @@ import Sidebar from './Sidebar/Sidebar.vue'
 import Header from './Header/Header.vue'
 import Tabs from './Tabs/Tabs.vue'
 
-onMounted(() => {
-  const resizeObserver = new ResizeObserver((entries, observer) => {
-    console.log(entries)
-    console.log('-------------')
-    console.log(observer)
-  })
-  resizeObserver.observe(document.querySelector('.layout-wrap') as Element)
+const route = useRoute()
+const layoutStore = useLayoutStore()
+
+function isMobile() {
+  const rect = document.body.getBoundingClientRect()
+  return rect.width - 1 < 992
+}
+
+function resizeHandle() {
+  layoutStore.setDevice(isMobile() ? 'mobile' : 'desktop')
+}
+
+watch(route, () => {
+  if(layoutStore.device === 'mobile' && layoutStore.sidebar) layoutStore.setSidebar(false)
 })
+
+onBeforeMount(() => window.addEventListener('resize', resizeHandle))
+
+onMounted(() => resizeHandle())
+
+onUnmounted(() => window.removeEventListener('resize', resizeHandle))
 </script>
 
 <template>
-  <div class="layout">
-    <n-layout h-full has-sider>
-      <Sidebar />
-      <n-layout h-full>
-        <Header />
-        <Tabs />
-        <n-layout-content class="layout-wrap">
-          <RouterView v-slot="{ Component }">
-            <Transition name="fade" mode="out-in">
-              <component :is="Component" :key="$route.path" />
-            </Transition>
-          </RouterView>
-        </n-layout-content>
-      </n-layout>
+  <n-layout h-full has-sider>
+    <Sidebar />
+    <n-layout h-full>
+      <Header />
+      <Tabs />
+      <n-layout-content class="layout-wrap">
+        <RouterView v-slot="{ Component }">
+          <Transition name="fade" mode="out-in">
+            <component :is="Component" :key="$route.path" />
+          </Transition>
+        </RouterView>
+      </n-layout-content>
     </n-layout>
-  </div>
+  </n-layout>
 </template>
 
 <style lang="scss" scoped>
-.layout {
+.layout-wrap {
   width: 100%;
-  height: 100%;
-  .layout-wrap {
-    width: 100%;
-    height: calc(100% - 82px);
-  }
+  height: calc(100% - 82px);
 }
 </style>

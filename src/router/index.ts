@@ -1,128 +1,6 @@
-import type { RouteRecordRaw } from 'vue-router'
-import { token } from '@/composables/token'
 import { createRouter, createWebHistory } from 'vue-router'
-import { formatDistanceStrict } from 'date-fns'
-import Layuot from '@/layout/Layout.vue'
-import { getStorage } from '@/utils/localStorage'
-import { i18n } from '@/locales'
 
-type TRoutes = RouteRecordRaw & {
-  children?: TRoutes[]
-  meta?: {
-    menu?: boolean
-    icon?: string
-  }
-}
-
-const routes: TRoutes[] = [
-  {
-    path: '/',
-    component: Layuot,
-    children: [
-      {
-        path: '',
-        name: 'Dashboard',
-        component: () => import('@/views/Dashboard/Dashboard.vue'),
-        meta: { menu: true, icon: 'SpeedometerOutline' }
-      },
-      {
-        path: 'icons',
-        name: 'Icons',
-        component: () => import('@/views/Icons/Icons.vue'),
-        meta: { menu: true, icon: 'SparklesOutline' }
-      },
-      {
-        path: 'nested',
-        name: 'Nested',
-        redirect: { name: 'Menu1' },
-        component: () => import('@/views/NestedMenus/NestedMenus.vue'),
-        meta: { menu: true, icon: 'MenuOutline' },
-        children: [
-          {
-            path: 'menu1',
-            name: 'Menu1',
-            component: () => import('@/views/NestedMenus/Menu1/Menu1.vue'),
-            meta: { icon: 'MenuOutline' }
-          },
-          {
-            path: 'menu2',
-            name: 'Menu2',
-            component: () => import('@/views/NestedMenus/Menu2/Menu2.vue'),
-            meta: { icon: 'MenuOutline' },
-            children: [
-              {
-                path: 'menu2_1',
-                name: 'Menu2_1',
-                component: () =>
-                  import('@/views/NestedMenus/Menu2/Menu2_1/Menu2_1.vue'),
-                meta: { icon: 'MenuOutline' }
-              },
-              {
-                path: 'menu2_2',
-                name: 'Menu2_2',
-                component: () =>
-                  import('@/views/NestedMenus/Menu2/Menu2_2/Menu2_2.vue'),
-                meta: { icon: 'MenuOutline' }
-              }
-            ]
-          },
-          {
-            path: 'menu3',
-            name: 'Menu3',
-            component: () => import('@/views/NestedMenus/Menu3/Menu3.vue'),
-            meta: { icon: 'MenuOutline' },
-            children: [
-              {
-                path: 'menu3_1',
-                name: 'Menu3_1',
-                component: () =>
-                  import('@/views/NestedMenus/Menu3/Menu3_1/Menu3_1.vue'),
-                meta: { icon: 'MenuOutline' },
-                children: [
-                  {
-                    path: 'menu3_1_1',
-                    name: 'Menu3_1_1',
-                    component: () =>
-                      import(
-                        '@/views/NestedMenus/Menu3/Menu3_1/Menu3_1_1/Menu3_1_1.vue'
-                      ),
-                    meta: { icon: 'MenuOutline' }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        path: 'system_setting',
-        name: 'SystemSetting',
-        component: () => import('@/views/Setting/Setting.vue'),
-        meta: { menu: true, icon: 'SettingsOutline' }
-      }
-    ]
-  },
-  {
-    path: '/error',
-    name: 'Error',
-    component: Layuot,
-    redirect: { name: 'NotFound' },
-    meta: { menu: true, icon: 'SadOutline' },
-    children: [
-      {
-        path: '404',
-        name: 'NotFound',
-        component: () => import('@/views/Error/NotFound.vue')
-      }
-    ]
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('@/views/Login/Login.vue')
-  },
-  { path: '/:pathMatch(.*)*', redirect: { name: 'NotFound' } }
-]
+import { routes } from './routes'
 
 const router = createRouter({
   routes,
@@ -133,26 +11,8 @@ const router = createRouter({
   })
 })
 
-router.beforeEach((to, form) => {
+router.beforeEach(() => {
   window.$loadingBar.start()
-
-  const loginTimer = getStorage('login-timer')
-  const loginDistance = formatDistanceStrict(Date.now(), Number(loginTimer), {
-    unit: 'day'
-  }).replace(/ days$/gi, '')
-
-  if (
-    (Number(loginDistance) > 7 && to.name !== 'Login') ||
-    (!token.value && to.name !== 'Login')
-  ) {
-    // @ts-ignore
-    window.$message.warning(i18n.global.t('no auth'))
-    useUserStore().logout()
-  }
-
-  // if (!token.value && to.name !== 'Login') return '/login'
-
-  if (token.value && to.name === 'Login') return '/'
 })
 
 router.afterEach(() => {

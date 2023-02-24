@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import { enUS, dateEnUS, zhCN, dateZhCN } from 'naive-ui'
 import { theme } from './composables/theme'
-const { locale } = useI18n()
-
-const language = computed(() => ({
-  locale: locale.value === 'en' ? enUS : zhCN,
-  dateLocale: locale.value === 'en' ? dateEnUS : dateZhCN
-}))
+import { language } from './locales'
 </script>
 
 <template>

@@ -8,6 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Chart: typeof import('./components/Chart.vue')['default']
+    IconWrap: typeof import('~icons/ic/on-wrap')['default']
     InfiniteScroll: typeof import('./components/InfiniteScroll.vue')['default']
     Language: typeof import('./components/Language.vue')['default']
     NAutoComplete: typeof import('naive-ui')['NAutoComplete']
@@ -17,6 +18,8 @@ declare module '@vue/runtime-core' {
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
+    NDrawer: typeof import('naive-ui')['NDrawer']
+    NDrawerContent: typeof import('naive-ui')['NDrawerContent']
     NDropdown: typeof import('naive-ui')['NDropdown']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
@@ -38,6 +41,10 @@ declare module '@vue/runtime-core' {
     NTag: typeof import('naive-ui')['NTag']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SvgMenufoldOutlined: typeof import('~icons/svg/menufold-outlined')['default']
+    SvgMenuFoldOutlined: typeof import('~icons/svg/menu-fold-outlined')['default']
+    SvgMenuUnfoldOutlined: typeof import('~icons/svg/menu-unfold-outlined')['default']
+    SvgMenuUnFoldOutlined: typeof import('~icons/svg/menu-un-fold-outlined')['default']
     Theme: typeof import('./components/Theme.vue')['default']
   }
 }

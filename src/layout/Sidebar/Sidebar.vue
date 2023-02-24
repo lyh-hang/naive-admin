@@ -8,9 +8,7 @@ import { useLayoutStore } from '@/store/layout'
 const { t } = useI18n()
 const router = useRouter()
 const routes = router.getRoutes()
-const { state, setSidebar } = useLayoutStore()
-
-const isCollapsed = ref<boolean>(state.sidebar)
+const layoutStore = useLayoutStore()
 
 const current = computed(() => {
   const pathArr = router.currentRoute.value.path.split('/')
@@ -21,74 +19,32 @@ function renderIcon(icon: Component) {
   return icon ? () => h(NIcon, null, { default: () => h(icon) }) : undefined
 }
 
-function routes2MenuOption(
-  routes: RouteRecordNormalized[] | RouteRecordRaw[]
-): MenuOption[] {
+function routes2MenuOption(routes: RouteRecordNormalized[] | RouteRecordRaw[]): MenuOption[] {
   return routes.map(route => {
     const label = route.children?.length
       ? () => t(`layout.${String(route.name)}`)
-      : () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: route.name
-              }
-            },
-            { default: () => t(`layout.${String(route.name)}`) }
-          )
+      : () => h(RouterLink, { to: { name: route.name }}, { default: () => t(`layout.${String(route.name)}`) })
+
     const key = route.path.replace('/', '')
-    const icon = renderIcon(
-      (vicons as { [key: string]: any })[route.meta?.icon as string]
-    )
-    const children = route.children?.length
-      ? routes2MenuOption(route.children)
-      : undefined
-    return {
-      label,
-      key,
-      icon,
-      children
-    }
+    const icon = renderIcon((vicons as { [key: string]: any })[route.meta?.icon as string])
+    const children = route.children?.length? routes2MenuOption(route.children) : undefined
+
+    return { label, key, icon, children }
   })
 }
 
-const menuOptions: MenuOption[] = routes2MenuOption(
-  routes.filter(i => i.meta.menu)
-)
-
-function collapsedHandle(collapsed: boolean) {
-  isCollapsed.value = collapsed
-  setSidebar(collapsed)
-}
-
-function resizeHandle(e: UIEvent) {
-  const rect = document.body.getBoundingClientRect()
-  if (rect.width < 992) {
-    isCollapsed.value = true
-    setSidebar(isCollapsed.value)
-  }
-}
-
-onBeforeMount(() => {
-  window.addEventListener('resize', resizeHandle)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', resizeHandle)
-})
+const menuOptions: MenuOption[] = routes2MenuOption(routes.filter(i => i.meta.menu))
 </script>
 
 <template>
   <n-layout-sider
+    v-if="layoutStore.device === 'desktop'"
     bordered
-    show-trigger
-    :collapsed="isCollapsed"
+    :collapsed="layoutStore.sidebar"
     collapse-mode="width"
     :collapsed-width="64"
-    h-full
     :native-scrollbar="false"
-    :on-update:collapsed="collapsedHandle"
+    h-full
   >
     <n-menu
       :value="current"
@@ -98,4 +54,15 @@ onBeforeUnmount(() => {
       :options="menuOptions"
     />
   </n-layout-sider>
+  <n-drawer
+    v-else
+    placement="left"
+    v-model:show="layoutStore.sidebar"
+    default-height="100%"
+    :on-update:show="layoutStore.setSidebar"
+  >
+    <n-drawer-content body-content-style="padding: 0">
+      <n-menu :value="current" :accordion="true" :options="menuOptions" />
+    </n-drawer-content>
+  </n-drawer>
 </template>

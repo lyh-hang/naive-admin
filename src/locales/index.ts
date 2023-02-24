@@ -1,4 +1,5 @@
 import { createI18n } from 'vue-i18n'
+import { enUS, dateEnUS, zhCN, dateZhCN } from 'naive-ui'
 import { getStorage } from '@/utils/localStorage'
 
 const messages = Object.fromEntries(
@@ -17,3 +18,8 @@ export const i18n = createI18n({
   locale: getStorage('locale') || 'zh-CN',
   messages
 })
+
+export const language = computed(() => ({
+  locale: i18n.global.locale.value === 'en' ? enUS : zhCN,
+  dateLocale: i18n.global.locale.value === 'en' ? dateEnUS : dateZhCN
+}))

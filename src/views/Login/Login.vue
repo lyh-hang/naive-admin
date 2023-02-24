@@ -1,26 +1,21 @@
 <template>
-  <div class="login">
+  <div h-full overflow-hidden>
     <n-form
       ref="formRef"
       size="large"
       :model="modelRef"
       :rules="rules"
-      class="login-form"
+      class="relative w-520px mx-auto my-0 pt-160px px-35px overflow-hidden"
     >
-      <div class="title-container">
-        <Theme :size="24" class="theme" />
+      <div relative>
+        <Theme :size="24" class="icon left-0" />
         <h1 text-center>{{ t('login.userForm') }}</h1>
-        <div class="language">
+        <div class="icon right-0">
           <Language :size="24" />
         </div>
       </div>
       <n-form-item path="username">
-        <n-auto-complete
-          v-model:value="modelRef.username"
-          type="text"
-          @keydown.enter.prevent
-          :placeholder="t('login.username')"
-        />
+        <n-auto-complete v-model:value="modelRef.username" type="text" @keydown.enter.prevent :placeholder="t('login.username')"/>
       </n-form-item>
       <n-form-item path="password">
         <n-input
@@ -33,17 +28,12 @@
         />
       </n-form-item>
       <n-form-item>
-        <n-button
-          :loading="loading"
-          style="width: 100%"
-          type="primary"
-          @click.submit="submit"
-        >
+        <n-button :loading="loading" style="width: 100%" type="primary" @click.submit="submit">
           {{ t('login.submit') }}
         </n-button>
       </n-form-item>
       <div class="tips">
-        {{ t('login.username') + ': admin' }}&nbsp;&nbsp;&nbsp;
+        {{ t('login.username') + ': ' + t('login.any') }}&nbsp;&nbsp;&nbsp;
         {{ t('login.password') + ': ' + t('login.any') }}
       </div>
     </n-form>
@@ -58,12 +48,10 @@ const { t } = useI18n()
 
 const { login } = useUserStore()
 
-const router = useRouter()
-
 const loading = ref<boolean>(false)
 const formRef = ref<FormInst | null>(null)
 const message = useMessage()
-const modelRef = ref<UserForm>({
+const modelRef = ref({
   username: 'admin',
   password: '111111'
 })
@@ -100,12 +88,10 @@ function submit(e: MouseEvent | KeyboardEvent) {
   e.preventDefault()
   formRef.value?.validate(async errors => {
     if (!errors) {
-      const { username, password } = modelRef.value
       loading.value = true
       try {
-        await login({ username, password })
+        await login()
         loading.value = false
-        router.push('/')
       } catch (e) {
         loading.value = false
       }
@@ -118,36 +104,12 @@ function submit(e: MouseEvent | KeyboardEvent) {
 </script>
 
 <style lang="scss" scoped>
-.login {
-  width: 100%;
-  min-height: 100%;
-  height: 100%;
-  overflow: hidden;
-  .login-form {
-    position: relative;
-    width: 520px;
-    margin: 0 auto;
-    padding: 160px 35px 0;
-    overflow: hidden;
-  }
-  .title-container {
-    position: relative;
-    width: 100%;
-    .theme {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-    }
-    .language {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-    }
-  }
-  .tips {
-    font-size: 12px;
-  }
+.tips {
+  font-size: 12px;
+}
+.icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>

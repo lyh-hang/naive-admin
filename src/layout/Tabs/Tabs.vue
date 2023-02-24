@@ -29,7 +29,7 @@ watch(
 </script>
 
 <template>
-  <n-layout-header class="tabs p-1 pl-4">
+  <n-layout-header class="border-bottom-1 p-1 pl-4">
     <n-tag
       size="small"
       :type="currentRoute === 'Dashboard' ? 'primary' : 'default'"
@@ -52,9 +52,3 @@ watch(
     </n-tag>
   </n-layout-header>
 </template>
-
-<style scoped lang="scss">
-.tabs {
-  border-bottom: 1px solid var(--n-border-color);
-}
-</style>
