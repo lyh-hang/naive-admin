@@ -4,14 +4,19 @@ import { toggleFullscreen, isFullscreen } from '@/composables/fullscreen'
 import { DropdownOption } from 'naive-ui'
 import { ExpandOutline, ContractOutline } from '@vicons/ionicons5'
 import img from '@/assets/avatar.jpg'
+import { RouterLink } from 'vue-router'
 
 const { t } = useI18n()
 const userStore = useUserStore()
 const layoutStore = useLayoutStore()
 const options = ref<DropdownOption[]>([
   {
-    label: () => t('layout.git'),
+    label: () => h(RouterLink, { to: '/' }, { default: () => t('layout.Dashboard') }),
     key: 1
+  },
+  {
+    label: () => h('a', { href: 'https://github.com/lyh-hang/naive-admin', target: '_blank' }, { default: () => t('layout.git') }),
+    key: 2
   },
   {
     type: 'divider',
@@ -19,21 +24,12 @@ const options = ref<DropdownOption[]>([
   },
   {
     label: () => t('layout.logout'),
-    key: 2
+    key: 3,
+    props: {
+      onClick: userStore.logout
+    }
   }
 ])
-function handleSelect(key: string | number) {
-  switch (key) {
-    case 1:
-      window.open('https://github.com/lyh-hang/naive-admin')
-      break
-    case 2:
-      userStore.logout()
-      break
-    default:
-      break
-  }
-}
 </script>
 
 <template>
@@ -56,8 +52,14 @@ function handleSelect(key: string | number) {
     <IconWrap #default="{ classList }">
       <Language :class="classList" w-35px />
     </IconWrap>
-    <n-dropdown trigger="click" show-arrow :options="options" @select="handleSelect">
-      <n-avatar cursor-pointer mx-2 size="medium" object-fit="cover" :src="img" />
+    <n-dropdown trigger="click" show-arrow :options="options">
+      <n-avatar
+        cursor-pointer
+        mx-2
+        size="medium"
+        object-fit="cover"
+        :src="img"
+      />
     </n-dropdown>
   </div>
 </template>

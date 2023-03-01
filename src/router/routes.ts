@@ -106,7 +106,7 @@ export const routes: TRoutes[] = [
     ]
   },
   {
-    path: '/login',
+    path: '/login/:redirect?',
     name: 'Login',
     component: () => import('@/views/Login/Login.vue')
   },

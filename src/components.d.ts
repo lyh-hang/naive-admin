@@ -8,7 +8,6 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Chart: typeof import('./components/Chart.vue')['default']
-    IconWrap: typeof import('~icons/ic/on-wrap')['default']
     InfiniteScroll: typeof import('./components/InfiniteScroll.vue')['default']
     Language: typeof import('./components/Language.vue')['default']
     NAutoComplete: typeof import('naive-ui')['NAutoComplete']
@@ -36,7 +35,9 @@ declare module '@vue/runtime-core' {
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NNumberAnimation: typeof import('naive-ui')['NNumberAnimation']
     NResult: typeof import('naive-ui')['NResult']
+    NScroll: typeof import('naive-ui')['NScroll']
     NScrollbar: typeof import('naive-ui')['NScrollbar']
+    NSpace: typeof import('naive-ui')['NSpace']
     NStatistic: typeof import('naive-ui')['NStatistic']
     NTag: typeof import('naive-ui')['NTag']
     RouterLink: typeof import('vue-router')['RouterLink']

@@ -1,22 +1,81 @@
 <script setup lang="ts">
+import { DropdownOption, useThemeVars, NIcon, NTag } from 'naive-ui'
+import { EllipsisHorizontal, CloseOutline } from '@vicons/ionicons5'
+
 const { t } = useI18n()
 
 const router = useRouter()
+const themeVars = useThemeVars()
 
 const currentRoute = computed(() => router.currentRoute.value.name)
-const tags = ref<Array<string>>([])
+const tags = ref<Array<string>>(['Dashboard'])
+const hiddenTags = ref<DropdownOption[]>([])
 
-function addTag(name: string) {
-  tags.value.indexOf(name) === -1 &&
-    name !== 'Dashboard' &&
+async function isOverflow(): Promise<boolean> {
+  await nextTick()
+  const tagsContainer = document.getElementById('tags-container')
+  if (!tagsContainer) return false
+  const offsetWidth = tagsContainer?.offsetWidth as number
+  const children = tagsContainer?.children
+  let total = 0
+  for (let i = 0; i < children!.length - 1; i++) {
+    const el = children![i] as HTMLElement
+    // margin-left = 8
+    total += el.offsetWidth + 8
+  }
+  // icon-width = 32
+  return total + 32 > offsetWidth
+}
+
+async function addTag(name: string) {
+  if (
+    tags.value.indexOf(name) === -1 &&
+    !hiddenTags.value.some(i => i.key === name)
+  ) {
     tags.value.push(name)
+    if (await isOverflow()) {
+      tags.value.pop()
+      hiddenTags.value.push({
+        key: name,
+        // <div class: 'flex items-center justify-between'>
+        //   <span></span>
+        //   <n-icon></n-icon>
+        // </div>
+        label: () =>
+          h('div', { class: 'flex items-center justify-between' }, [
+            h('span', {
+              innerHTML: t(`layout.${name}`),
+              style: { color: currentRoute.value === name && themeVars.value.primaryColor }
+            }),
+            h(NIcon, { size: 20, class: 'ml-2 hover:bg-gray-3 dark:hover:bg-gray-6', onClick: closeHandle(name) }, { default: () => h(CloseOutline) })
+          ])
+      })
+    }
+  }
 }
 
 function removeTag(name: string) {
-  tags.value = tags.value.filter(i => i !== name)
-  if(name === currentRoute.value) {
-    router.push({ name: tags.value[tags.value.length - 1] || 'Dashboard' })
+  // 点击tag
+  if(tags.value.includes(name)) {
+    tags.value = tags.value.filter(i => i !== name)
+    hiddenTags.value.length && addTag(hiddenTags.value.shift()?.key as string)
+  // 点击dropdown
+  } else {
+    hiddenTags.value = hiddenTags.value.filter(i => i.key !== name)
   }
+
+  if (name === currentRoute.value) {
+    router.push({ name: hiddenTags.value.length ? hiddenTags.value.at(-1)?.key as any : tags.value.at(-1) })
+  }
+}
+
+const closeHandle = (name: string) => (e: PointerEvent) => {
+  e.stopPropagation()
+  removeTag(name)
+}
+
+function selectHandle(key: string | number) {
+  router.push({ name: String(key) })
 }
 
 watch(
@@ -29,26 +88,35 @@ watch(
 </script>
 
 <template>
-  <n-layout-header class="border-bottom-1 p-1 pl-4">
-    <n-tag
-      size="small"
-      :type="currentRoute === 'Dashboard' ? 'primary' : 'default'"
-      cursor-pointer
-      @click="$router.push('/')"
-    >
-      {{ t('layout.Dashboard') }}
-    </n-tag>
+  <n-layout-header
+    id="tags-container"
+    class="h-32px relative flex items-center border-bottom-1 px-8px"
+  >
     <n-tag
       v-for="tag in tags"
       :key="tag"
       size="small"
       :type="currentRoute === tag ? 'primary' : 'default'"
-      class="cursor-pointer ml-2"
-      closable
+      cursor-pointer
+      ml-8px
+      :closable="tag !== 'Dashboard'"
       @click="$router.push({ name: tag })"
       @close="removeTag(tag)"
     >
       {{ t(`layout.${tag}`) }}
     </n-tag>
+    <n-dropdown
+      :options="hiddenTags"
+      :show-arrow="true"
+      size="small"
+      @select="selectHandle"
+    >
+      <n-icon
+        v-show="hiddenTags.length"
+        :size="20"
+        :component="EllipsisHorizontal"
+        class="absolute right-0 center h-full w-32px cursor-pointer"
+      />
+    </n-dropdown>
   </n-layout-header>
 </template>

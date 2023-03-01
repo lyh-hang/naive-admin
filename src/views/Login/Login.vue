@@ -90,7 +90,7 @@ function submit(e: MouseEvent | KeyboardEvent) {
     if (!errors) {
       loading.value = true
       try {
-        await login()
+        await login(modelRef.value.username)
         loading.value = false
       } catch (e) {
         loading.value = false
