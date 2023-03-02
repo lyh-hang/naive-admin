@@ -17,6 +17,7 @@ router.beforeEach(to => {
   if (!getStorage('token') && to.path !== '/login') {
     return { path: '/login', query: { redirect: to.path } }
   }
+  if (getStorage('token') && to.path === '/login') return '/'
 })
 
 router.afterEach(() => {

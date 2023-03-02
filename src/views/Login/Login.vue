@@ -1,5 +1,5 @@
 <template>
-  <div h-full overflow-hidden>
+  <div h-full flex overflow-hidden>
     <n-form
       ref="formRef"
       size="large"
@@ -8,14 +8,11 @@
       class="relative w-520px mx-auto my-0 pt-160px px-35px overflow-hidden"
     >
       <div relative>
-        <Theme :size="24" class="icon left-0" />
-        <h1 text-center>{{ t('login.userForm') }}</h1>
-        <div class="icon right-0">
-          <Language :size="24" />
-        </div>
+        <Theme :size="24" class="icon right-0" />
+        <h1 text-center>用户登录</h1>
       </div>
       <n-form-item path="username">
-        <n-auto-complete v-model:value="modelRef.username" type="text" @keydown.enter.prevent :placeholder="t('login.username')"/>
+        <n-auto-complete v-model:value="modelRef.username" type="text" @keydown.enter.prevent placeholder="用户名"/>
       </n-form-item>
       <n-form-item path="password">
         <n-input
@@ -23,18 +20,18 @@
           type="password"
           show-password-on="click"
           @keydown.enter.prevent="submit"
-          :placeholder="t('login.password')"
+          placeholder="密码"
           :input-props="{ autocomplete: 'off' }"
         />
       </n-form-item>
       <n-form-item>
         <n-button :loading="loading" style="width: 100%" type="primary" @click.submit="submit">
-          {{ t('login.submit') }}
+          登录
         </n-button>
       </n-form-item>
       <div class="tips">
-        {{ t('login.username') + ': ' + t('login.any') }}&nbsp;&nbsp;&nbsp;
-        {{ t('login.password') + ': ' + t('login.any') }}
+        用户名: 随便&nbsp;&nbsp;&nbsp;
+        密码: 随便
       </div>
     </n-form>
   </div>
@@ -42,9 +39,6 @@
 
 <script setup lang="ts">
 import { FormInst, FormItemRule, useMessage, FormRules } from 'naive-ui'
-import { useUserStore } from '@/store/user'
-
-const { t } = useI18n()
 
 const { login } = useUserStore()
 

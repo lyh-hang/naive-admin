@@ -5,7 +5,6 @@ import * as vicons from '@vicons/ionicons5'
 import { RouteRecordNormalized, RouteRecordRaw, RouterLink } from 'vue-router'
 import { useLayoutStore } from '@/store/layout'
 
-const { t } = useI18n()
 const router = useRouter()
 const routes = router.getRoutes()
 const layoutStore = useLayoutStore()
@@ -22,8 +21,8 @@ function renderIcon(icon: Component) {
 function routes2MenuOption(routes: RouteRecordNormalized[] | RouteRecordRaw[]): MenuOption[] {
   return routes.map(route => {
     const label = route.children?.length
-      ? () => t(`layout.${String(route.name)}`)
-      : () => h(RouterLink, { to: { name: route.name }}, { default: () => t(`layout.${String(route.name)}`) })
+      ? () => route.name
+      : () => h(RouterLink, { to: { name: route.name }}, { default: () => route.name })
 
     const key = route.path.replace('/', '')
     const icon = renderIcon((vicons as { [key: string]: any })[route.meta?.icon as string])

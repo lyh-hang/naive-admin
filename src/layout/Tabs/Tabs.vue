@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { DropdownOption, useThemeVars, NIcon, NTag } from 'naive-ui'
+import { DropdownOption, useThemeVars, NIcon } from 'naive-ui'
 import { EllipsisHorizontal, CloseOutline } from '@vicons/ionicons5'
-
-const { t } = useI18n()
 
 const router = useRouter()
 const themeVars = useThemeVars()
@@ -43,10 +41,7 @@ async function addTag(name: string) {
         // </div>
         label: () =>
           h('div', { class: 'flex items-center justify-between' }, [
-            h('span', {
-              innerHTML: t(`layout.${name}`),
-              style: { color: currentRoute.value === name && themeVars.value.primaryColor }
-            }),
+            h('span', { innerHTML: name, style: { color: currentRoute.value === name && themeVars.value.primaryColor } }),
             h(NIcon, { size: 20, class: 'ml-2 hover:bg-gray-3 dark:hover:bg-gray-6', onClick: closeHandle(name) }, { default: () => h(CloseOutline) })
           ])
       })
@@ -88,10 +83,7 @@ watch(
 </script>
 
 <template>
-  <n-layout-header
-    id="tags-container"
-    class="h-32px relative flex items-center border-bottom-1 px-8px"
-  >
+  <n-layout-header id="tags-container" class="h-32px relative flex items-center border-bottom-1 px-8px">
     <n-tag
       v-for="tag in tags"
       :key="tag"
@@ -103,14 +95,9 @@ watch(
       @click="$router.push({ name: tag })"
       @close="removeTag(tag)"
     >
-      {{ t(`layout.${tag}`) }}
+      {{ tag }}
     </n-tag>
-    <n-dropdown
-      :options="hiddenTags"
-      :show-arrow="true"
-      size="small"
-      @select="selectHandle"
-    >
+    <n-dropdown :options="hiddenTags" :show-arrow="true" size="small" @select="selectHandle">
       <n-icon
         v-show="hiddenTags.length"
         :size="20"

@@ -6,16 +6,15 @@ import { ExpandOutline, ContractOutline } from '@vicons/ionicons5'
 import img from '@/assets/avatar.jpg'
 import { RouterLink } from 'vue-router'
 
-const { t } = useI18n()
 const userStore = useUserStore()
 const layoutStore = useLayoutStore()
 const options = ref<DropdownOption[]>([
   {
-    label: () => h(RouterLink, { to: '/' }, { default: () => t('layout.Dashboard') }),
+    label: () => h(RouterLink, { to: '/' }, { default: () => 'Dashboard' }),
     key: 1
   },
   {
-    label: () => h('a', { href: 'https://github.com/lyh-hang/naive-admin', target: '_blank' }, { default: () => t('layout.git') }),
+    label: () => h('a', { href: 'https://github.com/lyh-hang/naive-admin', target: '_blank' }, { default: () => 'GitHub' }),
     key: 2
   },
   {
@@ -23,7 +22,7 @@ const options = ref<DropdownOption[]>([
     key: 'd1'
   },
   {
-    label: () => t('layout.logout'),
+    label: () => 'logout',
     key: 3,
     props: {
       onClick: userStore.logout
@@ -48,9 +47,6 @@ const options = ref<DropdownOption[]>([
     </IconWrap>
     <IconWrap #default="{ classList }">
       <Theme :class="classList" w-35px />
-    </IconWrap>
-    <IconWrap #default="{ classList }">
-      <Language :class="classList" w-35px />
     </IconWrap>
     <n-dropdown trigger="click" show-arrow :options="options">
       <n-avatar

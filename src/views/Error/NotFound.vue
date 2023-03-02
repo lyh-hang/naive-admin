@@ -1,16 +1,12 @@
-<script setup lang="ts">
-const { t } = useI18n()
-</script>
-
 <template>
   <div class="h-full flex justify-center items-center">
     <n-result
       status="404"
-      :title="`404 ${t('error.404')}`"
-      :description="t('error.tips')"
+      title="404"
+      description="NotFound"
     >
       <template #footer>
-        <n-button @click="$router.push('/')">{{ t('go home') }}</n-button>
+      <n-button @click="$router.push('/')">go home</n-button>
       </template>
     </n-result>
   </div>

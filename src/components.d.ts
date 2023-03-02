@@ -7,9 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Chart: typeof import('./components/Chart.vue')['default']
-    InfiniteScroll: typeof import('./components/InfiniteScroll.vue')['default']
-    Language: typeof import('./components/Language.vue')['default']
     NAutoComplete: typeof import('naive-ui')['NAutoComplete']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NBreadcrumb: typeof import('naive-ui')['NBreadcrumb']
@@ -22,9 +19,7 @@ declare module '@vue/runtime-core' {
     NDropdown: typeof import('naive-ui')['NDropdown']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
-    NGi: typeof import('naive-ui')['NGi']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
-    NGrid: typeof import('naive-ui')['NGrid']
     NIcon: typeof import('naive-ui')['NIcon']
     NInput: typeof import('naive-ui')['NInput']
     NLayout: typeof import('naive-ui')['NLayout']
@@ -33,18 +28,11 @@ declare module '@vue/runtime-core' {
     NLayoutSider: typeof import('naive-ui')['NLayoutSider']
     NMenu: typeof import('naive-ui')['NMenu']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
-    NNumberAnimation: typeof import('naive-ui')['NNumberAnimation']
     NResult: typeof import('naive-ui')['NResult']
-    NScroll: typeof import('naive-ui')['NScroll']
-    NScrollbar: typeof import('naive-ui')['NScrollbar']
-    NSpace: typeof import('naive-ui')['NSpace']
-    NStatistic: typeof import('naive-ui')['NStatistic']
     NTag: typeof import('naive-ui')['NTag']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SvgMenufoldOutlined: typeof import('~icons/svg/menufold-outlined')['default']
-    SvgMenuFoldOutlined: typeof import('~icons/svg/menu-fold-outlined')['default']
-    SvgMenuUnfoldOutlined: typeof import('~icons/svg/menu-unfold-outlined')['default']
     SvgMenuUnFoldOutlined: typeof import('~icons/svg/menu-un-fold-outlined')['default']
     Theme: typeof import('./components/Theme.vue')['default']
   }

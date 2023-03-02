@@ -6,7 +6,6 @@ import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Unocss from 'unocss/vite'
 import { presetAttributify, presetUno } from 'unocss'
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import Icons from 'unplugin-icons/vite'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import IconsResolver from 'unplugin-icons/resolver'
@@ -57,13 +56,6 @@ export default defineConfig({
           }
         ]
       ]
-    }),
-    // 国际化
-    // https://github.com/intlify/vite-plugin-vue-i18n
-    VueI18nPlugin({
-      runtimeOnly: true,
-      compositionOnly: true,
-      include: [fileURLToPath(new URL('./src/locales/**', import.meta.url))]
     })
   ],
   resolve: {
