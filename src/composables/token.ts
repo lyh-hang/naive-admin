@@ -1,0 +1,1 @@
+export const token = useLocalStorage<string | null>('token', null)

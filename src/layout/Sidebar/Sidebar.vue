@@ -8,6 +8,7 @@ import { useLayoutStore } from '@/store/layout'
 const router = useRouter()
 const routes = router.getRoutes()
 const layoutStore = useLayoutStore()
+const { t } = useI18n()
 
 const current = computed(() => {
   const pathArr = router.currentRoute.value.path.split('/')
@@ -21,8 +22,8 @@ function renderIcon(icon: Component) {
 function routes2MenuOption(routes: RouteRecordNormalized[] | RouteRecordRaw[]): MenuOption[] {
   return routes.map(route => {
     const label = route.children?.length
-      ? () => route.name
-      : () => h(RouterLink, { to: { name: route.name }}, { default: () => route.name })
+      ? () => t(`layout.${String(route.name)}`)
+      : () => h(RouterLink, { to: { name: route.name }}, { default: () => t(`layout.${String(route.name)}`) })
 
     const key = route.path.replace('/', '')
     const icon = renderIcon((vicons as { [key: string]: any })[route.meta?.icon as string])
@@ -44,13 +45,21 @@ const menuOptions: MenuOption[] = routes2MenuOption(routes.filter(i => i.meta.me
     :collapsed-width="64"
     :native-scrollbar="false"
     h-full
+    inverted
   >
+    <div v-if="layoutStore.logo" h-50px center truncate cursor-pointer>
+      <SvgVue w-35px />
+      <Transition name="logo">
+        <h3 ml-4 v-if="!layoutStore.sidebar">Naive Admin</h3>
+      </Transition>
+    </div>
     <n-menu
       :value="current"
       :accordion="true"
       :collapsed-width="64"
       :collapsed-icon-size="22"
       :options="menuOptions"
+      inverted
     />
   </n-layout-sider>
   <n-drawer

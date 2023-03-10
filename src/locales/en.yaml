@@ -1,0 +1,46 @@
+en: English
+zh-CN: 简体中文
+login: 
+  submit: Login
+  username: username
+  password: password
+  userForm: User Form
+  any: any
+  u null: Please enter the correct user name
+  p null: Please enter the correct pass word
+  p small: The password can not be less than 6 digits
+error:
+  tips: Please check whether the URL you entered is correct or click the button below to return to the home page.
+  404: No Resource
+go home: Back to home
+no auth: Expiration of authorization, Please log in again
+layout: 
+  Dashboard: Dashboard
+  Nested: Nested
+  Menu1: Menu1
+  Menu2: Menu2
+  Menu2_1: Menu2_1
+  Menu2_2: Menu2_2
+  Menu3: Menu3
+  Menu3_1: Menu3_1
+  Menu3_1_1: Menu3_1_1
+  SystemSetting: SystemSetting
+  Icons: Icons
+  Error: Error Pages
+  NotFound: '404'
+  logout: Log Out
+  git: GitHub
+setting: 
+  title: System Layout
+  theme: Theme
+  color: Theme Color
+  style: Navigation Style
+  lightSide: Light Menu
+  darkSide: Dark Menu
+  darkHead: Dark Header
+  mode: Navigation Mode
+  left: Left Menu
+  top: Top Menu
+  mixin: Mixin Menu
+  other: Other Settings
+  tags: Page Tags

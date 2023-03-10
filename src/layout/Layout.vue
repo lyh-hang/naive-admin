@@ -2,6 +2,7 @@
 import Sidebar from './Sidebar/Sidebar.vue'
 import Header from './Header/Header.vue'
 import Tabs from './Tabs/Tabs.vue'
+import Setting from './Setting/Setting.vue'
 
 const route = useRoute()
 const layoutStore = useLayoutStore()
@@ -12,7 +13,7 @@ function isMobile() {
 }
 
 function resizeHandle() {
-  layoutStore.setDevice(isMobile() ? 'mobile' : 'desktop')
+  layoutStore.setDevice(isMobile() ? 'mobile' : 'desktop')  
 }
 
 watch(route, () => {
@@ -30,8 +31,8 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandle))
   <n-layout h-full has-sider>
     <Sidebar />
     <n-layout h-full>
-      <Header />
-      <Tabs />
+      <Header inverted />
+      <Tabs v-if="layoutStore.tags" />
       <n-layout-content class="layout-wrap">
         <RouterView v-slot="{ Component }">
           <Transition name="fade" mode="out-in">
@@ -40,6 +41,7 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandle))
         </RouterView>
       </n-layout-content>
     </n-layout>
+    <Setting />
   </n-layout>
 </template>
 

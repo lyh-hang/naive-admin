@@ -4,9 +4,10 @@ import { EllipsisHorizontal, CloseOutline } from '@vicons/ionicons5'
 
 const router = useRouter()
 const themeVars = useThemeVars()
+const { t, locale } = useI18n()
 
 const currentRoute = computed(() => router.currentRoute.value.name)
-const tags = ref<Array<string>>(['Dashboard'])
+const tags = ref<Array<string>>([])
 const hiddenTags = ref<DropdownOption[]>([])
 
 async function isOverflow(): Promise<boolean> {
@@ -21,8 +22,8 @@ async function isOverflow(): Promise<boolean> {
     // margin-left = 8
     total += el.offsetWidth + 8
   }
-  // icon-width = 32
-  return total + 32 > offsetWidth
+  // icon-width = 32 reserved = 5
+  return total + 32 + 5 > offsetWidth
 }
 
 async function addTag(name: string) {
@@ -41,7 +42,7 @@ async function addTag(name: string) {
         // </div>
         label: () =>
           h('div', { class: 'flex items-center justify-between' }, [
-            h('span', { innerHTML: name, style: { color: currentRoute.value === name && themeVars.value.primaryColor } }),
+            h('span', { style: { color: currentRoute.value === name && themeVars.value.primaryColor } }, { default: () => t(`layout.${name}`) }),
             h(NIcon, { size: 20, class: 'ml-2 hover:bg-gray-3 dark:hover:bg-gray-6', onClick: closeHandle(name) }, { default: () => h(CloseOutline) })
           ])
       })
@@ -73,17 +74,43 @@ function selectHandle(key: string | number) {
   router.push({ name: String(key) })
 }
 
+function localeOrSizeChange() {
+  let tagTotal: string[] = tags.value.concat(hiddenTags.value.map(i => String(i.key)))
+  tags.value = []
+  hiddenTags.value = []
+  tagTotal.forEach(tag => {
+    setTimeout(() => {
+      addTag(tag)
+    }, 10);
+  })
+}
+
 watch(
   () => router.currentRoute.value.name,
-  name => {
-    addTag(name as string)
-  },
+  name => name !== 'Dashboard' && addTag(name as string),
   { immediate: true }
 )
+
+watch(locale, localeOrSizeChange)
+
+const resizeHandle = useDebounceFn(localeOrSizeChange, 200)
+
+onBeforeMount(() => window.addEventListener('resize', resizeHandle))
+
+onUnmounted(() => window.removeEventListener('resize', resizeHandle))
 </script>
 
 <template>
-  <n-layout-header id="tags-container" class="h-32px relative flex items-center border-bottom-1 px-8px">
+  <n-layout-header id="tags-container" class="w-auto h-32px relative flex items-center border-bottom-1 px-8px">
+    <n-tag
+      size="small"
+      :type="currentRoute === 'Dashboard' ? 'primary' : 'default'"
+      cursor-pointer
+      ml-8px
+      @click="$router.push({ name: 'Dashboard' })"
+    >
+      {{ t(`layout.Dashboard`) }}
+    </n-tag>
     <n-tag
       v-for="tag in tags"
       :key="tag"
@@ -91,11 +118,10 @@ watch(
       :type="currentRoute === tag ? 'primary' : 'default'"
       cursor-pointer
       ml-8px
-      :closable="tag !== 'Dashboard'"
       @click="$router.push({ name: tag })"
       @close="removeTag(tag)"
     >
-      {{ tag }}
+      {{ t(`layout.${tag}`) }}
     </n-tag>
     <n-dropdown :options="hiddenTags" :show-arrow="true" size="small" @select="selectHandle">
       <n-icon

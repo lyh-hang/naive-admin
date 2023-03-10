@@ -1,4 +1,4 @@
-import { getStorage } from '@/utils/localStorage'
+import { getToken } from '@/utils/token'
 import { createRouter, createWebHistory } from 'vue-router'
 
 import { routes } from './routes'
@@ -14,10 +14,12 @@ const router = createRouter({
 
 router.beforeEach(to => {
   window.$loadingBar.start()
-  if (!getStorage('token') && to.path !== '/login') {
+  const token = getToken()
+  if (!token && to.path !== '/login') {
     return { path: '/login', query: { redirect: to.path } }
   }
-  if (getStorage('token') && to.path === '/login') return '/'
+  if (token && to.path === '/login') return '/'
+  useUserStore().getInfo()
 })
 
 router.afterEach(() => {

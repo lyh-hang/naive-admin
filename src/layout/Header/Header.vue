@@ -3,6 +3,7 @@ import Hamburger from './components/Hamburger.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import RightMenu from './components/RightMenu.vue'
 import IconWrap from './components/IconWrap.vue'
+import { darkTheme } from 'naive-ui'
 
 const layoutStore = useLayoutStore()
 </script>

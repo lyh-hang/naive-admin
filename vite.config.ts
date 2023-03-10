@@ -9,6 +9,8 @@ import { presetAttributify, presetUno } from 'unocss'
 import Icons from 'unplugin-icons/vite'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import IconsResolver from 'unplugin-icons/resolver'
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
+import { viteMockServe } from 'vite-plugin-mock'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -46,16 +48,31 @@ export default defineConfig({
     // https://github.com/unocss/unocss
     Unocss({
       presets: [presetAttributify(), presetUno()],
-      rules: [
-        [
-          'center',
-          {
-            display: 'flex',
-            'align-items': 'center',
-            'justify-content': 'center'
-          }
-        ]
-      ]
+      // rules: [
+      //   [
+      //     'center',
+      //     {
+      //       display: 'flex',
+      //       'align-items': 'center',
+      //       'justify-content': 'center'
+      //     }
+      //   ]
+      // ],
+      shortcuts: {
+        center: 'flex items-center justify-center'
+      }
+    }),
+    // 国际化
+    // https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n
+    VueI18nPlugin({
+      runtimeOnly: true,
+      compositionOnly: true,
+      include: [fileURLToPath(new URL('./src/locales/**', import.meta.url))]
+    }),
+    // 数据模拟
+    // https://github.com/vbenjs/vite-plugin-mock
+    viteMockServe({
+      mockPath: 'mock'
     })
   ],
   resolve: {

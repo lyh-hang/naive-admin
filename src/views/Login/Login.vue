@@ -8,30 +8,33 @@
       class="relative w-520px mx-auto my-0 pt-160px px-35px overflow-hidden"
     >
       <div relative>
+        <div class="icon left-0">
+          <Language :size="24" />
+        </div>
+        <h1 text-center>{{ t('login.userForm') }}</h1>
         <Theme :size="24" class="icon right-0" />
-        <h1 text-center>用户登录</h1>
       </div>
       <n-form-item path="username">
-        <n-auto-complete v-model:value="modelRef.username" type="text" @keydown.enter.prevent placeholder="用户名"/>
+        <n-auto-complete v-model:value="modelRef.username" type="text" :placeholder="t('login.username')"/>
       </n-form-item>
       <n-form-item path="password">
         <n-input
           v-model:value="modelRef.password"
           type="password"
           show-password-on="click"
-          @keydown.enter.prevent="submit"
-          placeholder="密码"
+          @keydown.enter.prevent="submit" 
+          :placeholder="t('login.password')"
           :input-props="{ autocomplete: 'off' }"
         />
       </n-form-item>
       <n-form-item>
         <n-button :loading="loading" style="width: 100%" type="primary" @click.submit="submit">
-          登录
+          {{ t('login.submit') }}
         </n-button>
       </n-form-item>
       <div class="tips">
-        用户名: 随便&nbsp;&nbsp;&nbsp;
-        密码: 随便
+        {{ `${t('login.username')}: ${t('login.any')}` }}&nbsp;&nbsp;&nbsp;
+        {{ `${t('login.password')}: ${t('login.any')}` }}
       </div>
     </n-form>
   </div>
@@ -40,7 +43,9 @@
 <script setup lang="ts">
 import { FormInst, FormItemRule, useMessage, FormRules } from 'naive-ui'
 
+const router = useRouter()
 const { login } = useUserStore()
+const { t } = useI18n()
 
 const loading = ref<boolean>(false)
 const formRef = ref<FormInst | null>(null)
@@ -55,7 +60,7 @@ const rules: FormRules = {
       required: true,
       validator(rule: FormItemRule, value: string) {
         if (!value) {
-          return new Error('用户名不能为空')
+          return new Error(t('login.u null'))
         }
         return true
       },
@@ -67,9 +72,9 @@ const rules: FormRules = {
       required: true,
       validator(rule: FormItemRule, value: string) {
         if (!value) {
-          return new Error('密码不能为空')
+          return new Error(t('login.p null'))
         } else if (value.length < 6) {
-          return new Error('密码不能小于六位')
+          return new Error(t('login.p small'))
         }
         return true
       },
@@ -85,8 +90,8 @@ function submit(e: MouseEvent | KeyboardEvent) {
       loading.value = true
       try {
         await login(modelRef.value.username)
-        loading.value = false
-      } catch (e) {
+        router.push((router.currentRoute.value.query.redirect as string) || '/')
+      } finally {
         loading.value = false
       }
     } else {

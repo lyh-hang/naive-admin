@@ -1,0 +1,46 @@
+en: English
+zh-CN: 简体中文
+login: 
+  submit: 登录
+  username: 账号
+  password: 密码
+  userForm: 用户登录
+  any: 随便填
+  u null: 请输入正确的用户名
+  p null: 请输入正确的密码
+  p small: 密码不能小于六位
+error:
+  tips: 请检查您输入的网址是否正确，或点击下方按钮返回首页。
+  404: 资源不存在
+go home: 回首页
+no auth: 身份信息过期，请重新登录
+layout: 
+  Dashboard: 首页
+  Nested: 组合菜单
+  Menu1: 菜单1
+  Menu2: 菜单2
+  Menu2_1: 菜单2_1
+  Menu2_2: 菜单2_2
+  Menu3: 菜单3
+  Menu3_1: 菜单3_1
+  Menu3_1_1: 菜单3_1_1
+  SystemSetting: 系统设置
+  Icons: 图标
+  Error: 错误页面
+  NotFound: '404'
+  logout: 退出登录
+  git: 项目地址
+setting: 
+  title: 系统布局
+  theme: 主题
+  color: 主题色
+  style: 导航栏风格
+  lightSide: 白色菜单
+  darkSide: 暗色菜单
+  darkHead: 暗色顶部
+  mode: 导航模式
+  left: 左侧菜单
+  top: 顶部菜单
+  mixin: 混合菜单
+  other: 其他设置
+  tags: 标签页
