@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DropdownOption, useThemeVars, NIcon } from 'naive-ui'
-import { EllipsisHorizontal, CloseOutline } from '@vicons/ionicons5'
+import { renderIcon } from '@/utils/icon'
 
 const router = useRouter()
 const themeVars = useThemeVars()
@@ -43,7 +43,7 @@ async function addTag(name: string) {
         label: () =>
           h('div', { class: 'flex items-center justify-between' }, [
             h('span', { style: { color: currentRoute.value === name && themeVars.value.primaryColor } }, { default: () => t(`layout.${name}`) }),
-            h(NIcon, { size: 20, class: 'ml-2 hover:bg-gray-3 dark:hover:bg-gray-6', onClick: closeHandle(name) }, { default: () => h(CloseOutline) })
+            renderIcon('ion:close-outline', { size: 20, class: 'ml-2 hover:bg-gray-3 dark:hover:bg-gray-6', onClick: closeHandle(name) })()
           ])
       })
     }
@@ -127,9 +127,10 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandle))
       <n-icon
         v-show="hiddenTags.length"
         :size="20"
-        :component="EllipsisHorizontal"
-        class="absolute right-0 center h-full w-32px cursor-pointer"
-      />
+        class="absolute right-0 f-c-c h-full w-32px cursor-pointer"
+      >
+      <icon-ion:ellipsis-horizontal />
+    </n-icon>
     </n-dropdown>
   </n-layout-header>
 </template>

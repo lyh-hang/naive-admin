@@ -6,6 +6,8 @@ import router from './router'
 import { i18n } from './locales'
 import useDiscreteApi from './utils/createDiscreteApi'
 
+// 注册vite-plugin-svg-icons工具的脚本
+import 'virtual:svg-icons-register'
 import 'uno.css'
 import './styles/index.scss'
 

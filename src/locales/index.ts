@@ -1,6 +1,6 @@
 import { createI18n } from 'vue-i18n'
 import { zhCN, dateZhCN, enUS, dateEnUS, NDateLocale, NLocale } from 'naive-ui'
-import { getStorage } from '@/utils/localStorage'
+import { getStorage, setStorage } from '@/utils/localStorage'
 
 interface localeType {
   [key: string]: {
@@ -38,3 +38,8 @@ export const i18n = createI18n({
 })
 
 export const language = computed(() => locales[i18n.global.locale.value])
+
+export function toogleLocale(locale: string) {
+  i18n.global.locale.value = locale
+  setStorage('locale', locale)
+}

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const layoutStore = useLayoutStore()
+const layout = useLayoutStore()
 </script>
 
 <template>
-  <n-icon :size="20" @click="() => layoutStore.setSidebar(!layoutStore.sidebar)">
-    <SvgMenufoldOutlined v-show="layoutStore.sidebar" />
-    <SvgMenuUnFoldOutlined v-show="!layoutStore.sidebar" />
+  <n-icon :size="20" @click="() => layout.setSidebar(!layout.sidebar)">
+    <icon-ant-design:menu-fold-outlined v-show="layout.sidebar" />
+    <icon-ant-design:menu-unfold-outlined v-show="!layout.sidebar" />
   </n-icon>
 </template>

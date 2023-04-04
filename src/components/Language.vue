@@ -6,9 +6,10 @@ export default {
 
 <script setup lang="ts">
 import type { DropdownOption } from 'naive-ui'
-import { Language } from '@vicons/ionicons5'
+import { toogleLocale } from '@/locales'
 
 const { locale, messages, t } = useI18n()
+const layout = useLayoutStore()
 
 const { size } = defineProps({
   size: {
@@ -17,13 +18,7 @@ const { size } = defineProps({
   }
 })
 
-const { setLocale } = useLayoutStore()
-
 const options = ref<DropdownOption[]>(Object.keys(messages.value).map(i => ({ key: i, label: () => t(i) })))
-
-function handleSelect(key: string) {
-  locale.value = key
-}
 
 watch(
   locale,
@@ -31,7 +26,6 @@ watch(
     options.value = options.value.map(item => {
       return { ...item, disabled: item.key === locale.value }
     })
-    setLocale(locale.value)
   },
   { immediate: true }
 )
@@ -42,11 +36,11 @@ watch(
     trigger="click"
     show-arrow
     :options="options"
-    @select="handleSelect"
-    inverted
+    @select="toogleLocale" 
+    :inverted="layout.menuStyle === 'darkHead'"
   >
-    <n-icon center cursor-pointer select-none v-bind="$attrs" :size="size">
-      <Language />
+    <n-icon f-c-c cursor-pointer select-none v-bind="$attrs" :size="size">
+      <icon-ion:language />
     </n-icon>
   </n-dropdown>
 </template>

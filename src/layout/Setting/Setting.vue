@@ -1,62 +1,23 @@
 <script setup lang="ts">
-import { SunnyOutline, MoonOutline, CheckmarkOutline } from '@vicons/ionicons5'
 import { useThemeVars } from 'naive-ui'
-import { theme, toggleDark, themeOverrides } from '@/composables/theme'
-import { colorLighten } from '@/utils'
+import { theme, toggleDark, setThemeOverrides } from '@/composables/theme'
 import SettingDrawer from './components/SettingDrawer.vue'
 import LayoutIcon from './components/LayoutIcon.vue'
 
-interface PrimaryColor {
-  primaryColor: string
-  primaryColorHover: string
-  primaryColorPressed: string
-  primaryColorSuppl: string
-}
-
 const themeVars = useThemeVars()
-
-const layoutStore = useLayoutStore()
+const layout = useLayoutStore()
 const { t } = useI18n()
 
-const systemColor: PrimaryColor[] = [
-  {
-    primaryColor: '#18a058',
-    primaryColorHover: '#36ad6a',
-    primaryColorPressed: '#0c7a43',
-    primaryColorSuppl: '#36ad6a'
-  },
-  {
-    primaryColor: '#2080f0',
-    primaryColorHover: '#4098fc',
-    primaryColorPressed: '#1060c9',
-    primaryColorSuppl: '#4098fc'
-  },
-  {
-    primaryColor: '#f0a020',
-    primaryColorHover: '#fcb040',
-    primaryColorPressed: '#c97c10',
-    primaryColorSuppl: '#fcb040'
-  },
-  {
-    primaryColor: '#d03050',
-    primaryColorHover: '#de576d',
-    primaryColorPressed: '#ab1f3f',
-    primaryColorSuppl: '#de576d'
-  },
-  {
-    primaryColor: '#7f59ff',
-    primaryColorHover: colorLighten('#7f59ff', 5),
-    primaryColorPressed: colorLighten('#7f59ff', -9),
-    primaryColorSuppl: colorLighten('#7f59ff', 5)
-  },
-  {
-    primaryColor: '#13c2c2',
-    primaryColorHover: colorLighten('#13c2c2', 5),
-    primaryColorPressed: colorLighten('#13c2c2', -9),
-    primaryColorSuppl: colorLighten('#13c2c2', 5)
-  }
+const colorSelect = ref<HTMLInputElement | null>(null)
+const colorList: string[] = [
+  '#18a058',
+  '#2080f0',
+  '#f0a020',
+  '#d03050',
+  '#7f59ff',
+  '#13c2c2',
+  '#316c72'
 ]
-
 const navStyle = [
   { name: 'lightSide', style: ['t-light', 'l-light'] },
   { name: 'darkSide', style: ['t-light', 'l-dark'] },
@@ -67,22 +28,11 @@ const navMode = [
   { name: 'top', style: ['t-dark'] },
   { name: 'mixin', style: ['t-dark', 'l-dark'] }
 ]
-const colorSelect = ref<HTMLInputElement | null>(null)
-const colorIpt = ref<string>('')
 
-function setThemeColor(common: PrimaryColor) {
-  themeOverrides.value.common = common
-  // themeOverrides.value.LoadingBar.colorLoading = common.primaryColor
+function menuModeText(mode:string): string {
+  if(mode === 'left' || layout.device === 'desktop') return `setting.${mode}`
+  return 'mobile disabled'
 }
-
-watch(colorIpt, c => {
-  themeOverrides.value.common = {
-    primaryColor: c,
-    primaryColorHover: colorLighten(c as string, 5),
-    primaryColorPressed: colorLighten(c as string, 9),
-    primaryColorSuppl: colorLighten(c as string, 5)
-  }
-})
 </script>
 
 <template>
@@ -91,42 +41,53 @@ watch(colorIpt, c => {
       <h3 text-center>{{ t('setting.title') }}</h3>
       <n-divider>{{ t('setting.theme') }}</n-divider>
       <n-switch w-full :value="theme !== null" :on-update:value="toggleDark">
-        <template #checked-icon> <n-icon :component="MoonOutline" /> </template>
+        <template #checked-icon> <n-icon>
+          <icon-ion:moon-outline />
+        </n-icon> </template>
         <template #unchecked-icon>
-          <n-icon :component="SunnyOutline" />
+          <n-icon>
+            <icon-ion:sunny-outline />
+          </n-icon>
         </template>
       </n-switch>
       <n-divider>{{ t('setting.color') }}</n-divider>
       <ul class="color-picker">
         <li
-          v-for="color in systemColor"
-          :key="color.primaryColor"
-          :style="{ backgroundColor: color.primaryColor }"
-          @click="setThemeColor(color)"
+          v-for="color in colorList"
+          :key="color"
+          :style="{ backgroundColor: color }"
+          @click="setThemeOverrides(color)"
         >
-          <CheckmarkOutline
-            v-show="themeVars.primaryColor === color.primaryColor"
-          />
+          <icon-ion:checkmark-outline v-show="themeVars.primaryColor === color" />
         </li>
         <li @click="colorSelect?.click()">
-          <CheckmarkOutline
-            v-show="
-              !systemColor.some(c => c.primaryColor === themeVars.primaryColor)
+          <icon-ion:checkmark-outline
+            v-show="!colorList.some(c => c === themeVars.primaryColor)"
+          />
+          <input
+            ref="colorSelect"
+            type="color"
+            @input="
+              setThemeOverrides(($event.target as HTMLInputElement).value)
             "
           />
-          <input v-model="colorIpt" ref="colorSelect" type="color" />
         </li>
       </ul>
       <n-divider>{{ t('setting.style') }}</n-divider>
       <div flex justify-between>
         <n-popover
-          v-for="nav in navStyle"
+          v-for="(nav, i) in navStyle"
           :key="nav.name"
           to="#setting"
           trigger="hover"
         >
           <template #trigger>
-            <LayoutIcon :check="!true" :class="nav.style" cursor-pointer />
+            <LayoutIcon
+              :class="nav.style"
+              :check="layout.menuStyle === nav.name"
+              cursor-pointer
+              @click="layout.setMenuStyle(nav.name)"
+            />
           </template>
           <span>{{ t(`setting.${nav.name}`) }}</span>
         </n-popover>
@@ -140,22 +101,31 @@ watch(colorIpt, c => {
           trigger="hover"
         >
           <template #trigger>
-            <LayoutIcon :check="!true" :class="nav.style" cursor-pointer />
+            <LayoutIcon
+              :class="nav.style"
+              :check="layout.menuMode === nav.name"
+              cursor-pointer
+              @click="layout.setMenuMode(nav.name)"
+            />
           </template>
-          <span>{{ t(`setting.${nav.name}`) }}</span>
+          <span>{{ t(menuModeText(nav.name)) }}</span>
         </n-popover>
       </div>
       <n-divider>{{ t('setting.other') }}</n-divider>
       <n-space vertical size="large">
         <div flex justify-between items-center>
-          <span>{{ t('setting.tags') }}</span> <n-switch :value="layoutStore.tags"
-            @update:value="layoutStore.toogleTags" size="small" />
+          <span>{{ t('setting.tags') }}</span>
+          <n-switch
+            :value="layout.tags"
+            @update:value="layout.toogleTags"
+            size="small"
+          />
         </div>
         <div flex justify-between items-center>
           <span>logo</span>
           <n-switch
-            :value="layoutStore.logo"
-            @update:value="layoutStore.toogleLogo"
+            :value="layout.logo"
+            @update:value="layout.toogleLogo"
             size="small"
           />
         </div>

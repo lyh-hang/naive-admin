@@ -1,34 +1,43 @@
 import { getStorage, setStorage } from '@/utils/localStorage'
 
-interface StateType {
+interface IState {
   device: string
-  locale: string
   sidebar: boolean
+  menuStyle: string
+  menuMode: string
   tags: boolean
   logo: boolean
 }
 
-export const useLayoutStore = defineStore('layout', () => {
-  const state = reactive<StateType>({
+export const useLayoutStore = defineStore('app-layout', () => {
+  const state = reactive<IState>({
     device: 'desktop',
-    locale: getStorage('locale') || 'zh-CN',
-    sidebar: getStorage('sidebar') === 'true' || false,
-    tags: getStorage('tags') === 'true' || false,
-    logo: getStorage('logo') === 'true' || false
+    sidebar: getStorage('sidebar') === 'true',
+    menuStyle: getStorage('menuStyle') || 'lightSide',
+    menuMode: getStorage('menuMode') || 'left',
+    tags: getStorage('tags') === 'true',
+    logo: getStorage('logo') === 'true'
   })
 
   function setDevice(device: string = 'desktop') {
     state.device = device
   }
 
-  function setLocale(locale: string) {
-    state.locale = locale
-    setStorage('locale', locale)
-  }
-
   function setSidebar(sidebar: boolean) {
     state.sidebar = sidebar
     setStorage('sidebar', `${sidebar}`)
+  }
+
+  function setMenuStyle(style: string) {
+    state.menuStyle = style
+    setStorage('menuStyle', style)
+  }
+
+  function setMenuMode(mode: string) {
+    if (state.device === 'desktop') {
+      state.menuMode = mode
+      setStorage('menuMode', mode)
+    }
   }
 
   function toogleLogo() {
@@ -44,9 +53,10 @@ export const useLayoutStore = defineStore('layout', () => {
   return {
     ...toRefs(state),
     setDevice,
-    setLocale,
     setSidebar,
     toogleLogo,
-    toogleTags
+    toogleTags,
+    setMenuStyle,
+    setMenuMode
   }
 })

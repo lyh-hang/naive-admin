@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { SettingsOutline, CloseOutline } from '@vicons/ionicons5'
 import { useThemeVars } from 'naive-ui'
 
 const themeVars = useThemeVars()
-const show = ref<boolean>(true)
+const show = ref<boolean>(false)
 </script>
 
 <template>
   <div :class="{ show: show }" select-none>
     <div class="setting-bg" @click="show = false"></div>
     <div class="setting" :style="{ backgroundColor: themeVars.baseColor, boxShadow: show ? themeVars.boxShadow2 : '' }">
-      <div :style="{ backgroundColor: themeVars.primaryColor }" class="setting-btn center" @click="show = !show">
-        <n-icon :size="26" :color="themeVars.baseColor" :component="show ? CloseOutline : SettingsOutline" />
+      <div :style="{ backgroundColor: themeVars.primaryColor }" class="setting-btn f-c-c" @click="show = !show">
+        <n-icon :size="26" :color="themeVars.baseColor">
+          <icon-ion:close-outline v-show="show" />
+          <icon-ion:settings-outline v-show="!show" />
+        </n-icon>
       </div>
       <slot />
     </div>

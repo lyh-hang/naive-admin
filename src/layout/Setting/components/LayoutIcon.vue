@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Checkmark } from '@vicons/ionicons5'
-
 const props = defineProps({
   check: {
     required: true,
@@ -11,7 +9,9 @@ const props = defineProps({
 
 <template>
   <n-el tag="div" class="common">
-    <n-icon v-show="props.check" class="check" :size="18" :component="Checkmark" />
+    <n-icon v-show="props.check" class="check" :size="18">
+      <icon-ion:checkmark-outline />
+    </n-icon>
   </n-el>
 </template>
 

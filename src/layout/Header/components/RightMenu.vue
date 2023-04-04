@@ -2,20 +2,25 @@
 import IconWrap from './IconWrap.vue'
 import { toggleFullscreen, isFullscreen } from '@/composables/fullscreen'
 import { DropdownOption } from 'naive-ui'
-import { ExpandOutline, ContractOutline } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 
 const userStore = useUserStore()
-const layoutStore = useLayoutStore()
+const layout = useLayoutStore()
 const { t } = useI18n()
 
 const options = ref<DropdownOption[]>([
   {
-    label: () => h(RouterLink, { to: '/' }, { default: () => t('layout.Dashboard') }),
+    label: () =>
+      h(RouterLink, { to: '/' }, { default: () => t('layout.Dashboard') }),
     key: 1
   },
   {
-    label: () => h('a', { href: 'https://github.com/lyh-hang/naive-admin', target: '_blank' }, { default: () => t('layout.git') }),
+    label: () =>
+      h(
+        'a',
+        { href: 'https://github.com/lyh-hang/naive-admin', target: '_blank' },
+        { default: () => t('layout.git') }
+      ),
     key: 2
   },
   {
@@ -33,8 +38,8 @@ const options = ref<DropdownOption[]>([
 </script>
 
 <template>
-  <div center h-full mr-4>
-    <IconWrap v-if="layoutStore.device === 'desktop'" #default="{ classList }">
+  <div f-c-c h-full mr-4>
+    <IconWrap v-if="layout.device === 'desktop'" #default="{ classList }">
       <n-icon
         :size="20"
         @click="toggleFullscreen"
@@ -42,17 +47,17 @@ const options = ref<DropdownOption[]>([
         cursor-pointer
         w-35px
       >
-        <ExpandOutline v-show="!isFullscreen" />
-        <ContractOutline v-show="isFullscreen" />
+        <icon-ion:expand-outline v-show="!isFullscreen" />
+        <icon-ion:contract-outline v-show="isFullscreen" />
       </n-icon>
     </IconWrap>
     <IconWrap #default="{ classList }">
       <Language :class="classList" w-35px />
     </IconWrap>
-    <n-dropdown trigger="click" show-arrow :options="options">
+    <n-dropdown trigger="click" show-arrow :options="options" :inverted="layout.menuStyle === 'darkHead'">
       <div h-full cursor-pointer>
         <IconWrap #default="{ classList }">
-          <div :class="classList"  px-2>
+          <div :class="classList" px-2>
             <n-avatar
               size="small"
               round

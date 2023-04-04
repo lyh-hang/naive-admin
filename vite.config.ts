@@ -11,6 +11,7 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import IconsResolver from 'unplugin-icons/resolver'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import { viteMockServe } from 'vite-plugin-mock'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -25,7 +26,7 @@ export default defineConfig({
         // naive-ui解析
         NaiveUiResolver(),
         // icon解析
-        IconsResolver({ prefix: false, customCollections: ['svg'] })
+        IconsResolver({ prefix: 'icon', customCollections: ['custom'] })
       ]
     }),
     // 自动导入API
@@ -41,25 +42,21 @@ export default defineConfig({
     Icons({
       compiler: 'vue3',
       customCollections: {
-        svg: FileSystemIconLoader('src/icons/svg')
+        custom: FileSystemIconLoader('src/icons/svg')
       }
+    }),
+    // 将指定文件夹中的图标插入html
+    // https://github.com/vbenjs/vite-plugin-svg-icons
+    createSvgIconsPlugin({
+      iconDirs: [fileURLToPath(new URL('./src/icons', import.meta.url))],
+      symbolId: 'icon-[dir]-[name]'
     }),
     // css引擎
     // https://github.com/unocss/unocss
     Unocss({
       presets: [presetAttributify(), presetUno()],
-      // rules: [
-      //   [
-      //     'center',
-      //     {
-      //       display: 'flex',
-      //       'align-items': 'center',
-      //       'justify-content': 'center'
-      //     }
-      //   ]
-      // ],
       shortcuts: {
-        center: 'flex items-center justify-center'
+        'f-c-c': 'flex items-center justify-center'
       }
     }),
     // 国际化

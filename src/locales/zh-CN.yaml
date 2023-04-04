@@ -14,6 +14,7 @@ error:
   404: 资源不存在
 go home: 回首页
 no auth: 身份信息过期，请重新登录
+mobile disabled: 小屏模式禁用
 layout: 
   Dashboard: 首页
   Nested: 组合菜单
