@@ -116,7 +116,7 @@ function menuModeText(mode:string): string {
         <div flex justify-between items-center>
           <span>{{ t('setting.tags') }}</span>
           <n-switch
-            :value="layout.tags"
+            :value="layout.tagsView"
             @update:value="layout.toogleTags"
             size="small"
           />
@@ -144,6 +144,7 @@ function menuModeText(mode:string): string {
   li {
     width: 20px;
     height: 20px;
+    font-size: 16px;
     margin-right: 10px;
     border-radius: 2px;
     cursor: pointer;

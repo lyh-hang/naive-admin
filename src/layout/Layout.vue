@@ -53,7 +53,7 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandle))
       <!-- 顶部栏 -->
       <Header />
       <!-- 标签页 -->
-      <Tabs v-if="layout.tags" />
+      <Tabs v-if="layout.tagsView" />
       <!-- 路由 -->
       <n-layout-content class="layout-wrap">
         <RouterView v-slot="{ Component }">

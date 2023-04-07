@@ -51,15 +51,12 @@ const systemTheme: IColor[] = [
   }
 ]
 
-const initTheme = JSON.parse(
-  getStorage('theme') ||
-    `{
-        common: ${systemTheme[0]},
-        LoadingBar: {
-          colorLoading: ${systemTheme[0].primaryColor}
-        }
-    }`
-)
+const initTheme = JSON.parse(String(getStorage('theme'))) || {
+  common: systemTheme[0],
+  LoadingBar: {
+    colorLoading: systemTheme[0].primaryColor
+  }
+}
 
 export const themeOverrides = ref<GlobalThemeOverrides>(initTheme)
 

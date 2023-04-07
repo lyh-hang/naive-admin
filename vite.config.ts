@@ -12,6 +12,8 @@ import IconsResolver from 'unplugin-icons/resolver'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import { viteMockServe } from 'vite-plugin-mock'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import { visualizer } from 'rollup-plugin-visualizer'
+// import compression from 'vite-plugin-compression'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -70,12 +72,30 @@ export default defineConfig({
     // https://github.com/vbenjs/vite-plugin-mock
     viteMockServe({
       mockPath: 'mock'
-    })
+    }),
+    visualizer({
+      open: true
+    }),
+    // compression()
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       vue: 'vue/dist/vue.esm-bundler.js'
     }
-  }
+  },
+  // build:{
+  //   rollupOptions: {
+  //     output: {
+  //       manualChunks: {
+  //         echarts: ['echarts'],
+  //         'naive-ui': ['naive-ui'],
+  //         vue: ['vue'],
+  //         pinia: ['pinia'],
+  //         'vue-router':['vue-router'],
+  //         axios: ['axios']
+  //       }
+  //     }
+  //   }
+  // }
 })

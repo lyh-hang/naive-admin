@@ -9,9 +9,9 @@ const breadcrumbs = computed(() =>
 )
 
 function getIcon(meta: any) {
-  if (meta.icon) return renderIcon(meta.icon as string, { size: 16 })
+  if (meta.icon) return renderIcon(meta.icon as string, { size: 18 })
   if (meta.customIcon)
-    return renderCustomIcon(meta.customIcon as string, { size: 16 })
+    return renderCustomIcon(meta.customIcon as string, { size: 18 })
   return undefined
 }
 </script>
@@ -19,7 +19,7 @@ function getIcon(meta: any) {
 <template>
   <n-breadcrumb>
     <n-breadcrumb-item v-show="router.currentRoute.value.path !== '/'" @click="router.push('/')">
-      <component :is="renderIcon('ion:speedometer-outline')" />
+      <component :is="renderIcon('ion:speedometer-outline', { size: 18 })" />
       {{ t(`layout.Dashboard`) }}
     </n-breadcrumb-item>
     <n-breadcrumb-item v-for="b in breadcrumbs" :key="b.name" @click="router.push({ name: b.name })">

@@ -14,7 +14,7 @@ async function isOverflow(): Promise<boolean> {
   await nextTick()
   const tagsContainer = document.getElementById('tags-container')
   if (!tagsContainer) return false
-  const offsetWidth = tagsContainer?.offsetWidth as number
+  const offsetWidth = tagsContainer?.offsetWidth
   const children = tagsContainer?.children
   let total = 0
   for (let i = 0; i < children!.length - 1; i++) {
@@ -61,7 +61,7 @@ function removeTag(name: string) {
   }
 
   if (name === currentRoute.value) {
-    router.push({ name: hiddenTags.value.length ? hiddenTags.value.at(-1)?.key as any : tags.value.at(-1) })
+    router.push({ name: hiddenTags.value.length ? hiddenTags.value.at(-1)?.key as any : tags.value.at(-1) || 'Dashboard' })
   }
 }
 
@@ -117,6 +117,7 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandle))
       size="small"
       :type="currentRoute === tag ? 'primary' : 'default'"
       cursor-pointer
+      closable
       ml-8px
       @click="$router.push({ name: tag })"
       @close="removeTag(tag)"

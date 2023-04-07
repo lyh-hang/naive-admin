@@ -5,7 +5,7 @@ interface IState {
   sidebar: boolean
   menuStyle: string
   menuMode: string
-  tags: boolean
+  tagsView: boolean
   logo: boolean
 }
 
@@ -15,8 +15,8 @@ export const useLayoutStore = defineStore('app-layout', () => {
     sidebar: getStorage('sidebar') === 'true',
     menuStyle: getStorage('menuStyle') || 'lightSide',
     menuMode: getStorage('menuMode') || 'left',
-    tags: getStorage('tags') === 'true',
-    logo: getStorage('logo') === 'true'
+    tagsView: !(getStorage('tagsView') === 'false'),
+    logo: !(getStorage('logo') === 'false')
   })
 
   function setDevice(device: string = 'desktop') {
@@ -46,8 +46,8 @@ export const useLayoutStore = defineStore('app-layout', () => {
   }
 
   function toogleTags() {
-    state.tags = !state.tags
-    setStorage('tags', String(state.tags))
+    state.tagsView = !state.tagsView
+    setStorage('tagsView', String(state.tagsView))
   }
 
   return {
