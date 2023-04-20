@@ -1,106 +1,107 @@
 <template>
-  <v-chart class="chart" :option="option" />
+  <v-chart :option="option" autoresize :loading="loading" />
 </template>
 
 <script setup lang="ts">
-import { use } from 'echarts/core'
-import { CanvasRenderer } from 'echarts/renderers'
-import { PieChart, LineChart, BarChart,  BoxplotChart,  CandlestickChart,  } from 'echarts/charts'
+import { use, registerTheme } from 'echarts/core'
+import { SVGRenderer } from 'echarts/renderers'
+import {
+  BarChart,
+  LineChart,
+  PieChart,
+  MapChart,
+  PictorialBarChart,
+  RadarChart,
+  ScatterChart,
+} from 'echarts/charts';
+
 import {
   TitleComponent,
   TooltipComponent,
-  LegendComponent,
-  AriaComponent,
-  BrushComponent,
-  CalendarComponent,
-  DataZoomComponent,
-  DatasetComponent,
-  GeoComponent,
-  GraphicComponent,
   GridComponent,
-  MarkAreaComponent,
-  AxisPointerComponent,
-  DataZoomInsideComponent,
-  DataZoomSliderComponent,
-  GridSimpleComponent,
-  LegendPlainComponent,
-  LegendScrollComponent,
-  MarkLineComponent,
+  PolarComponent,
+  AriaComponent,
   ParallelComponent,
-  TimelineComponent
-} from 'echarts/components'
-import VChart, { THEME_KEY } from 'vue-echarts'
+  LegendComponent,
+  RadarComponent,
+  ToolboxComponent,
+  DataZoomComponent,
+  VisualMapComponent,
+  TimelineComponent,
+  CalendarComponent,
+  GraphicComponent,
+} from 'echarts/components';
+import VChart, { THEME_KEY, LOADING_OPTIONS_KEY } from 'vue-echarts'
+import { useThemeVars } from 'naive-ui'
+// import theme from './chartTheme.json'
+
+interface IProps {
+  option: EchartsOptions
+  loading?: boolean
+}
+
+const themeVars = useThemeVars()
+// registerTheme('dark', theme)
+provide(THEME_KEY, 'light')
+// provide(LOADING_OPTIONS_KEY, {
+//   text: 'loading',
+//   color: themeVars.value.primaryColor,
+//   textColor: themeVars.value.textColorBase,
+//   maskColor: 'rgba(0, 0, 0, 0.5)',
+//   //   zlevel: 0,
+
+//   // Font size. Available since `v4.8.0`.
+//   fontSize: 12,
+//   // Show an animated "spinner" or not. Available since `v4.8.0`.
+//   showSpinner: true,
+//   // Radius of the "spinner". Available since `v4.8.0`.
+//   //   spinnerRadius: 10,
+//   // Line width of the "spinner". Available since `v4.8.0`.
+//   lineWidth: 5,
+//   // Font thick weight. Available since `v5.0.1`.
+//   fontWeight: 'normal',
+//   // Font style. Available since `v5.0.1`.
+//   fontStyle: 'normal',
+//   // Font family. Available since `v5.0.1`.
+//   fontFamily: 'sans-serif'
+// })
 
 use([
-  CanvasRenderer,
-  PieChart,
-  LineChart,
+  LegendComponent,
   TitleComponent,
   TooltipComponent,
-  LegendComponent,
-  BarChart, BoxplotChart, CandlestickChart,
-  AriaComponent,
-  BrushComponent,
-  CalendarComponent,
-  DataZoomComponent,
-  DatasetComponent,
-  GeoComponent,
-  GraphicComponent,
   GridComponent,
-  MarkAreaComponent,
-  AxisPointerComponent,
-  DataZoomInsideComponent,
-  DataZoomSliderComponent,
-  GridSimpleComponent,
-  LegendPlainComponent,
-  LegendScrollComponent,
-  MarkLineComponent,
+  PolarComponent,
+  AriaComponent,
   ParallelComponent,
-  TimelineComponent])
+  BarChart,
+  LineChart,
+  PieChart,
+  MapChart,
+  RadarChart,
+  SVGRenderer,
+  PictorialBarChart,
+  RadarComponent,
+  ToolboxComponent,
+  DataZoomComponent,
+  VisualMapComponent,
+  TimelineComponent,
+  CalendarComponent,
+  GraphicComponent,
+  ScatterChart,
+]);
 
-// provide(THEME_KEY, 'dark')
-
-const option = ref({
-  title: {
-    text: 'Traffic Sources',
-    left: 'center'
-  },
-  tooltip: {
-    trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ({d}%)'
-  },
-  legend: {
-    orient: 'vertical',
-    left: 'left',
-    data: ['Direct', 'Email', 'Ad Networks', 'Video Ads', 'Search Engines']
-  },
-  series: [
-    {
-      name: 'Traffic Sources',
-      type: 'pie',
-      radius: '55%',
-      center: ['50%', '60%'],
-      data: [
-        { value: 335, name: 'Direct' },
-        { value: 310, name: 'Email' },
-        { value: 234, name: 'Ad Networks' },
-        { value: 135, name: 'Video Ads' },
-        { value: 1548, name: 'Search Engines' }
-      ],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
+const {option} = defineProps<IProps>()
+onMounted(() => {
+  let common: EchartsOptions = {
+    yAxis: {
+      splitLine: {
+        lineStyle: {
+          opacity: 0.5
         }
       }
     }
-  ]
+  }
+//   console.log(Object.assign(option, common))
 })
 </script>
-
-<style scoped>
-.chart {
-  height: 400px;
-}
-</style>
